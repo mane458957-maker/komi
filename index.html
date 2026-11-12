@@ -80,10 +80,10 @@ h1,h2,h3{font-family:var(--display);font-weight:300;line-height:1.02;margin:0;te
 #bees{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
 .hero-title span{display:inline-block;will-change:transform,opacity,filter}
 .c-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr minmax(260px,34vw) 1fr;align-items:center;gap:3vw;color:var(--paper);padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
-.jar-box{position:relative;aspect-ratio:196/354;max-width:100%;max-height:78vh;margin:auto;width:100%;perspective:1400px;z-index:1}
+.jar-box{position:relative;aspect-ratio:941/1672;max-width:100%;max-height:78vh;margin:auto;width:100%;perspective:1400px;z-index:1}
 .jar{position:absolute;inset:0;will-change:transform,opacity,filter;transform-origin:50% 60%}
-.jar::after{content:"";position:absolute;left:12%;right:12%;bottom:-3%;height:6%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);filter:blur(4px)}
-.jar img{width:100%;height:100%;object-fit:cover;-webkit-mask-image:radial-gradient(ellipse 54% 52% at 50% 50%,#000 78%,transparent 100%);mask-image:radial-gradient(ellipse 54% 52% at 50% 50%,#000 78%,transparent 100%)}
+.jar::after{display:none;content:"";position:absolute;left:12%;right:12%;bottom:-3%;height:6%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);filter:blur(4px)}
+.jar img{width:100%;height:100%;object-fit:cover;border-radius:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
 .c-text{position:relative;min-height:16em;min-width:0;z-index:3;text-shadow:0 2px 18px rgba(0,0,0,.45)}
 .c-side{position:relative;z-index:3}
 .c-text article{position:absolute;left:0;right:0;top:50%;transform:translateY(-40%);opacity:0;transition:opacity .6s ease,transform .8s ease}
@@ -115,9 +115,9 @@ section.shop{padding-block:120px 80px}
 .head h2{font-size:clamp(2.6rem,6vw,5rem)}
 .head h2 em{color:var(--amber-deep)}
 .head p{margin:0;max-width:44ch;color:var(--ink-soft)}
-.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
 .card{display:flex;flex-direction:column;gap:14px;min-width:0}
-.card .ph{background:var(--paper-2);border-radius:2px;overflow:hidden;aspect-ratio:3/4}
+.card .ph{background:var(--paper-2);border-radius:14px;overflow:hidden;aspect-ratio:3/4}
 .card .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
 .card:hover .ph img{transform:scale(1.05)}
 .card h3{font-size:1.5rem;line-height:1.1}
@@ -129,7 +129,7 @@ section.shop{padding-block:120px 80px}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink)}
 .btn.ghost:hover{background:var(--ink);color:var(--paper)}
 .link{font-size:.85rem;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px;white-space:nowrap}
-@media (max-width:1000px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:1000px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:680px){.head{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* ---------- coffret ---------- */
@@ -215,8 +215,8 @@ footer .fine{grid-column:1/-1;display:flex;justify-content:space-between;flex-wr
       <p>Miel non pasteurisé, sans additif, mis en pot tel qu'il sort de la ruche.</p>
     </div></div>
     <div class="copy"><div class="beat" id="t3" style="opacity:0;color:var(--night);text-shadow:none">
-      <p class="caps">Collection Créations</p>
-      <h2>Cinq miels,<br>cinq rencontres</h2>
+      <p class="caps">La collection</p>
+      <h2>Quatre miels,<br>deux terroirs</h2>
     </div></div>
 
     <div class="steps" aria-label="Du rucher au pot"><div class="track" id="track">
@@ -232,14 +232,14 @@ footer .fine{grid-column:1/-1;display:flex;justify-content:space-between;flex-wr
 </section>
 
 <!-- SCÈNE 2 — les cinq créations -->
-<section id="creations" aria-label="Collection Créations">
+<section id="creations" aria-label="La collection">
   <div class="stage">
     <canvas id="fx" aria-hidden="true"></canvas>
     <div class="c-grid">
       <div class="c-text" id="ctext"></div>
       <div class="jar-box" id="jars"></div>
       <div class="c-side">
-        <div class="counter"><span id="cnum">01</span> <small>/ 05</small></div>
+        <div class="counter"><span id="cnum">01</span> <small id="ctotal">/ 04</small></div>
         <div class="dots" id="dots"></div>
         <div class="meta caps"><span>250 g</span><span id="corig">Origine Andalousie</span></div>
       </div>
@@ -251,8 +251,8 @@ footer .fine{grid-column:1/-1;display:flex;justify-content:space-between;flex-wr
 <section class="shop" id="boutique">
   <div class="wrap">
     <div class="head">
-      <div><p class="caps">La boutique</p><h2>Collection <em>Créations</em></h2></div>
-      <p>Chaque création associe un miel d'Andalousie à un ingrédient choisi pour lui. Pots de 250 g, couvercle en bois naturel, étiquette en papier texturé.</p>
+      <div><p class="caps">La boutique</p><h2>Nos <em>miels</em></h2></div>
+      <p>Des miels d'Andalousie et du Maroc, récoltés à la main. Couvercle en bois naturel gravé, étiquette en papier texturé.</p>
     </div>
     <div class="cards" id="cards"></div>
   </div>
@@ -330,18 +330,15 @@ const FLAVORS = [
   { id:"thym", name:"Miel de thym <em>et nigelle</em>", short:"Thym & nigelle", ing:"Miel de thym sauvage, graines de nigelle.",
     text:"Un miel de garrigue, herbacé et puissant, relevé du léger poivré des graines de nigelle.",
     origin:"Andalousie", tint:"#3a2a3c", fx:["blossom","seed"] },
-  { id:"eucalyptus", name:"Miel d'eucalyptus <em>et pollen</em>", short:"Eucalyptus & pollen", ing:"Miel d'eucalyptus, pollen de fleurs.",
-    text:"Frais et balsamique, avec la mâche ronde et légèrement sucrée des grains de pollen.",
-    origin:"Andalousie", tint:"#2c3a2e", fx:["leaf","pollen"] },
-  { id:"vanille", name:"Miel infusé <em>à la vanille</em>", short:"Vanille", ing:"Miel de fleurs, gousses de vanille de Tahiti et Madagascar.",
-    text:"Infusé lentement avec des gousses entières. Doux, crémeux, presque pâtissier.",
-    origin:"Andalousie", tint:"#3b2c1d", fx:["pod","flower"] },
-  { id:"safran", name:"Miel infusé <em>au safran</em>", short:"Safran de Taliouine", ing:"Miel de fleurs, pistils de safran de Taliouine.",
-    text:"Les pistils rouges du safran de Taliouine colorent le miel d'or profond et lui donnent une note florale rare.",
-    origin:"Andalousie · safran du Maroc", tint:"#4a1d1a", fx:["thread","petal"] },
-  { id:"jujubier", name:"Miel de <em>jujubier</em>", short:"Jujubier & épices", ing:"Miel de jujubier, curcuma, poivre noir, gingembre, propolis, pollen.",
-    text:"Notre création la plus intense : un miel de jujubier, chaud et épicé, avec curcuma, gingembre et poivre noir.",
-    origin:"Andalousie", tint:"#45241a", fx:["jujube","chunk","seed"] },
+  { id:"fleurs", name:"Miel de <em>fleurs sauvages</em>", short:"Fleurs sauvages", ing:"Miel de fleurs des sierras andalouses.",
+    text:"Le miel des collines en fleurs : doux, floral et rond, celui que l'on met sur toutes les tables.",
+    origin:"Andalousie", tint:"#3d2832", fx:["flower","blossom","pollen"] },
+  { id:"arganier", name:"Miel <em>d'arganier</em>", short:"Arganier", ing:"Miel de fleurs d'arganier, région de l'Arganeraie.",
+    text:"Récolté dans l'arganeraie marocaine. Riche et boisé, avec des notes de fruits secs et de caramel.",
+    origin:"Maroc", tint:"#3b2616", fx:["nut","flower"] },
+  { id:"romarin", name:"Miel <em>de romarin</em>", short:"Romarin", ing:"Miel de romarin en fleur.",
+    text:"Clair et délicat, avec la fraîcheur herbacée du romarin en fleur.",
+    origin:"Andalousie", tint:"#2d3430", fx:["needle","petal"] },
 ];
 
 /* ================= OUTILS ================= */
@@ -368,7 +365,7 @@ $("#phone").textContent = CONFIG.whatsapp ? "+" + CONFIG.whatsapp : "Numéro Wha
 const jars = $("#jars"), ctext = $("#ctext"), dots = $("#dots"), cards = $("#cards");
 FLAVORS.forEach((f,i) => {
   jars.insertAdjacentHTML("beforeend", `<div class="jar"><img src="img/pot-${f.id}.jpg" alt="Pot KŌMI ${f.short}"></div>`);
-  ctext.insertAdjacentHTML("beforeend", `<article class="${i?"":"on"}"><p class="caps">Création ${String(i+1).padStart(2,"0")}</p><h3>${f.name}</h3><p>${f.text}</p></article>`);
+  ctext.insertAdjacentHTML("beforeend", `<article class="${i?"":"on"}"><p class="caps">${f.origin}</p><h3>${f.name}</h3><p>${f.text}</p></article>`);
   dots.insertAdjacentHTML("beforeend", `<b class="${i?"":"on"}"></b>`);
   cards.insertAdjacentHTML("beforeend", `<div class="card">
     <div class="ph"><img src="img/pot-${f.id}.jpg" alt="Pot KŌMI ${f.short}, 250 g" loading="lazy"></div>
@@ -530,13 +527,13 @@ const PAL = {
   blossom:["#b48ac9","#9b6db5","#d3b4e0"], seed:["#1a1410","#2b211a"], leaf:["#6f8f5a","#4d6b44","#8aa877"],
   pollen:["#e6b52e","#d9a21b","#f1c94f"], pod:["#2a1a10","#3b2416"], flower:["#fbf6ec","#f3e8d2"],
   thread:["#c4241c","#a51a14","#d8402a"], petal:["#9a5fc4","#b07ad6"], jujube:["#8c2a1c","#a1361f","#6f1f15"],
-  chunk:["#e09a1f","#d4a35a","#f0b73a"]
+  chunk:["#e09a1f","#d4a35a","#f0b73a"], nut:["#8a5a2b","#a06a35","#6e4520"], needle:["#5f7d55","#4b6744","#7a9a6c"]
 };
 function spawn(kind, w, h, fromTop){
   const d = devicePixelRatio>1?1.6:1;
   return { kind, x:Math.random()*w, y: fromTop ? -40 : Math.random()*h, z: .45+Math.random()*.9,
     r:Math.random()*Math.PI*2, vr:(Math.random()-.5)*.02, vx:(Math.random()-.5)*.25,
-    s:(kind==="seed"||kind==="pollen"?4:kind==="thread"?16:kind==="pod"?38:kind==="jujube"?14:kind==="chunk"?10:12)*d*(.7+Math.random()*.6),
+    s:(kind==="seed"||kind==="pollen"?4:kind==="nut"?12:kind==="needle"?14:kind==="thread"?16:kind==="pod"?38:kind==="jujube"?14:kind==="chunk"?10:12)*d*(.7+Math.random()*.6),
     c:PAL[kind][Math.floor(Math.random()*PAL[kind].length)] };
 }
 function setFlavor(i){
@@ -570,6 +567,8 @@ function drawPart(p){
     case "thread": c.lineCap="round"; c.lineWidth=Math.max(1.4,s*.12); c.beginPath(); c.moveTo(-s*.5,0); c.bezierCurveTo(-s*.15,-s*.25,s*.15,s*.25,s*.5,0); c.stroke(); break;
     case "petal": c.beginPath(); c.ellipse(0,0,s*.38,s*.9,0,0,7); c.fill(); break;
     case "jujube": c.beginPath(); c.ellipse(0,0,s*.75,s*.55,0,0,7); c.fill(); c.fillStyle="rgba(255,220,180,.22)"; c.beginPath(); c.ellipse(-s*.25,-s*.18,s*.22,s*.12,0,0,7); c.fill(); break;
+    case "nut": c.beginPath(); c.ellipse(0,0,s*.9,s*.6,0,0,7); c.fill(); c.fillStyle="rgba(255,235,200,.28)"; c.beginPath(); c.ellipse(-s*.25,-s*.2,s*.3,s*.14,0,0,7); c.fill(); break;
+    case "needle": c.lineCap="round"; c.lineWidth=Math.max(1.6,s*.14); c.beginPath(); c.moveTo(-s*.7,0); c.lineTo(s*.7,0); c.stroke(); break;
     case "chunk": c.beginPath(); c.moveTo(-s*.6,-s*.4); c.lineTo(s*.55,-s*.5); c.lineTo(s*.6,s*.35); c.lineTo(-s*.45,s*.5); c.closePath(); c.fill(); break;
   }
   c.restore();
