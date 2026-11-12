@@ -64,6 +64,19 @@ h1,h2,h3{font-family:var(--display);font-weight:300;line-height:1.02;margin:0;te
 #creations{height:600vh;position:relative}
 #creations .stage{background:var(--tint,#2b1b10);transition:background-color .9s ease}
 #fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.steps{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2;-webkit-mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent)}
+.track{position:absolute;inset:0 0 auto 0;will-change:transform}
+.step{position:absolute;width:min(380px,60%);color:var(--paper);text-shadow:0 2px 20px rgba(28,18,11,.7),0 0 2px rgba(28,18,11,.4)}
+.step.l{left:max(22px,7vw,env(safe-area-inset-left,0px))}
+.step.r{right:max(34px,8vw,env(safe-area-inset-right,0px));text-align:right}
+.step .n{display:block;font-family:var(--display);font-size:clamp(2.6rem,5vw,4.4rem);line-height:1;opacity:.55;font-variant-numeric:tabular-nums}
+.step h3{font-size:clamp(1.7rem,3.4vw,3rem);font-style:italic;margin:6px 0 10px}
+.step p{margin:0;font-size:.98rem;opacity:.9}
+.rail{position:absolute;right:max(12px,2.2vw,env(safe-area-inset-right,0px));top:30%;height:40%;width:2px;background:rgba(243,234,219,.22);z-index:3;border-radius:2px}
+.rail i{position:absolute;inset:0 0 auto 0;height:calc(var(--p,0)*100%);background:var(--paper);border-radius:2px}
+.rail b{position:absolute;left:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;background:var(--paper);opacity:.35;transition:opacity .3s,transform .3s}
+.rail b.on{opacity:1;transform:scale(1.4)}
+@media (max-width:640px){.step{width:68%;padding:14px 16px;border-radius:14px;background:rgba(28,18,11,.38);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}.step .n{font-size:2.2rem}.step h3{font-size:1.5rem}.step p{font-size:.86rem}.step.l{left:14px}.step.r{right:30px}}
 #bees{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
 .hero-title span{display:inline-block;will-change:transform,opacity,filter}
 .c-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr minmax(260px,34vw) 1fr;align-items:center;gap:3vw;color:var(--paper);padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
@@ -206,6 +219,13 @@ footer .fine{grid-column:1/-1;display:flex;justify-content:space-between;flex-wr
       <h2>Cinq miels,<br>cinq rencontres</h2>
     </div></div>
 
+    <div class="steps" aria-label="Du rucher au pot"><div class="track" id="track">
+      <article class="step l" data-at=".14"><span class="n">01</span><p class="caps">Le rucher</p><h3>Les collines d'Andalousie</h3><p>Nos ruches sont posées au milieu du thym sauvage et des oliviers.</p></article>
+      <article class="step r" data-at=".36"><span class="n">02</span><p class="caps">La récolte</p><h3>Cadre par cadre, à la main</h3><p>On ne prélève que les rayons operculés, quand le miel est mûr.</p></article>
+      <article class="step l" data-at=".55"><span class="n">03</span><p class="caps">La coulée</p><h3>Un miel brut</h3><p>Non pasteurisé, sans additif. Il coule tel qu'il sort de la ruche.</p></article>
+      <article class="step r" data-at=".72"><span class="n">04</span><p class="caps">La mise en pot</p><h3>Bois gravé, abeille dorée</h3><p>Chaque pot est fermé d'un couvercle en bois naturel gravé.</p></article>
+    </div></div>
+    <div class="rail" id="rail" aria-hidden="true"><i></i><b style="top:0%"></b><b style="top:33%"></b><b style="top:66%"></b><b style="top:100%"></b></div>
     <canvas id="bees" aria-hidden="true"></canvas>
     <div class="scroll-hint caps" id="hint">Défiler<i></i></div>
   </div>
@@ -360,6 +380,8 @@ document.querySelectorAll("[data-order]").forEach(wire);
 /* ================= SCÈNE 1 ================= */
 const origine = $("#origine"), L1 = $("#L1"), L2 = $("#L2"), hint = $("#hint");
 const T = [$("#t0"),$("#t1"),$("#t2"),$("#t3")];
+const track = $("#track"), rail = $("#rail"), railDots = [...rail.querySelectorAll("b")];
+function placeSteps(){ const D = innerHeight*4.2; track.querySelectorAll(".step").forEach(el=>{ el.style.top = (innerHeight*.5 + parseFloat(el.dataset.at)*D - el.offsetHeight/2) + "px"; }); }
 const titleLetters = [...document.querySelectorAll(".hero-title span")];
 
 /* ================= ABEILLES ================= */
@@ -481,8 +503,13 @@ function scene1(time){
   // Le rythme des textes suit la vidéo quand elle est là : rucher → coulée → couvercle → les cinq miels
   const K = vid ? [.04,.12, .14,.2,.3,.36, .58,.64,.74,.8, .9,.96] : [.04,.14, .12,.2,.3,.37, .44,.52,.62,.68, .86,.94];
   show(T[0], out(K[0],K[1]), -seg(p,0,K[1])*40);
-  show(T[1], Math.min(inn(K[2],K[3]), out(K[4],K[5])), (1-inn(K[2],K[3]))*30);
-  show(T[2], Math.min(inn(K[6],K[7]), out(K[8],K[9])), (1-inn(K[6],K[7]))*30);
+  T[1].hidden = T[2].hidden = true;
+  // les étapes défilent à gauche et à droite, à la vitesse du doigt : on sent qu'on descend
+  const D = innerHeight*4.2;
+  track.style.transform = `translate3d(0,${-p*D}px,0)`;
+  const rp = clamp(p/.82); rail.style.setProperty("--p", rp);
+  railDots.forEach((b,i)=>b.classList.toggle("on", rp >= i/3 - .01));
+  rail.style.opacity = 1 - seg(p,.82,.88);
   show(T[3], inn(K[10],K[11]), (1-inn(K[10],K[11]))*30);
   hint.style.opacity = 1 - seg(p,0,.05);
   // les lettres de KŌMI s'écartent et s'envolent une à une
@@ -582,8 +609,9 @@ function scene2(){
 /* ================= BOUCLE ================= */
 const bar = $("#bar");
 let lastW = 0;
-function resize(){ fit(honey); fit(fx); fit(beeCv); if(innerWidth !== lastW || !bees.length){ lastW = innerWidth; makeBees(); } if(frames.length){ fit(seq); drawFrame.last = null; } }
+function resize(){ placeSteps(); fit(honey); fit(fx); fit(beeCv); if(innerWidth !== lastW || !bees.length){ lastW = innerWidth; makeBees(); } if(frames.length){ fit(seq); drawFrame.last = null; } }
 addEventListener("resize", resize); resize();
+document.fonts && document.fonts.ready.then(placeSteps);
 function loop(time){
   const p1 = scene1(time||0); scene2();
   const shopTop = creations.getBoundingClientRect().bottom;
