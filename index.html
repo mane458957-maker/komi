@@ -64,12 +64,15 @@ h1,h2,h3{font-family:var(--display);font-weight:300;line-height:1.02;margin:0;te
 #creations{height:600vh;position:relative}
 #creations .stage{background:var(--tint,#2b1b10);transition:background-color .9s ease}
 #fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#bees{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
+.hero-title span{display:inline-block;will-change:transform,opacity,filter}
 .c-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr minmax(260px,34vw) 1fr;align-items:center;gap:3vw;color:var(--paper);padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
-.jar-box{position:relative;aspect-ratio:196/354;max-width:100%;max-height:78vh;margin:auto;width:100%}
-.jar{position:absolute;inset:0;opacity:0;transform:translateY(30px) scale(.96);transition:opacity .8s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
-.jar.on{opacity:1;transform:none}
+.jar-box{position:relative;aspect-ratio:196/354;max-width:100%;max-height:78vh;margin:auto;width:100%;perspective:1400px;z-index:1}
+.jar{position:absolute;inset:0;will-change:transform,opacity,filter;transform-origin:50% 60%}
+.jar::after{content:"";position:absolute;left:12%;right:12%;bottom:-3%;height:6%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);filter:blur(4px)}
 .jar img{width:100%;height:100%;object-fit:cover;-webkit-mask-image:radial-gradient(ellipse 54% 52% at 50% 50%,#000 78%,transparent 100%);mask-image:radial-gradient(ellipse 54% 52% at 50% 50%,#000 78%,transparent 100%)}
-.c-text{position:relative;min-height:16em;min-width:0}
+.c-text{position:relative;min-height:16em;min-width:0;z-index:3;text-shadow:0 2px 18px rgba(0,0,0,.45)}
+.c-side{position:relative;z-index:3}
 .c-text article{position:absolute;left:0;right:0;top:50%;transform:translateY(-40%);opacity:0;transition:opacity .6s ease,transform .8s ease}
 .c-text article.on{opacity:1;transform:translateY(-50%)}
 .c-text h3{font-size:clamp(2.2rem,4.2vw,3.8rem);margin:14px 0 18px}
@@ -157,7 +160,7 @@ footer .fine{grid-column:1/-1;display:flex;justify-content:space-between;flex-wr
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .scroll-hint i{animation:none}
-  .jar,.c-text article{transition:none}
+  .c-text article{transition:none}
 }
 </style>
 
@@ -185,7 +188,7 @@ footer .fine{grid-column:1/-1;display:flex;justify-content:space-between;flex-wr
     <div class="grain"></div>
 
     <div class="copy"><div id="t0">
-      <h1 class="hero-title">KŌMI</h1>
+      <h1 class="hero-title" aria-label="KŌMI"><span>K</span><span>Ō</span><span>M</span><span>I</span></h1>
       <p class="caps hero-sub">Nature héritage · Andalousie &amp; Maroc</p>
     </div></div>
     <div class="copy"><div class="beat" id="t1" style="opacity:0">
@@ -203,6 +206,7 @@ footer .fine{grid-column:1/-1;display:flex;justify-content:space-between;flex-wr
       <h2>Cinq miels,<br>cinq rencontres</h2>
     </div></div>
 
+    <canvas id="bees" aria-hidden="true"></canvas>
     <div class="scroll-hint caps" id="hint">Défiler<i></i></div>
   </div>
 </section>
@@ -298,7 +302,7 @@ const CONFIG = {
   // Séquence vidéo de la scène 1 (du rucher au pot). count:0 = version provisoire avec photos.
   // Séquences vidéo de la scène 1 (du rucher au pot). count:0 = version provisoire avec photos.
   FRAMES: {
-    mobile:  { count: 152, path: i => `frames/mobile/${String(i+1).padStart(4,"0")}.webp` },
+    mobile:  { count: 151, path: i => `frames/mobile/${String(i+1).padStart(4,"0")}.webp` },
     desktop: { count: 0,   path: i => `frames/desktop/${String(i+1).padStart(4,"0")}.webp` },
   },
 };
@@ -343,7 +347,7 @@ $("#phone").textContent = CONFIG.whatsapp ? "+" + CONFIG.whatsapp : "Numéro Wha
 /* ================= CONSTRUCTION ================= */
 const jars = $("#jars"), ctext = $("#ctext"), dots = $("#dots"), cards = $("#cards");
 FLAVORS.forEach((f,i) => {
-  jars.insertAdjacentHTML("beforeend", `<div class="jar${i?"":" on"}"><img src="img/pot-${f.id}.jpg" alt="Pot KŌMI ${f.short}"></div>`);
+  jars.insertAdjacentHTML("beforeend", `<div class="jar"><img src="img/pot-${f.id}.jpg" alt="Pot KŌMI ${f.short}"></div>`);
   ctext.insertAdjacentHTML("beforeend", `<article class="${i?"":"on"}"><p class="caps">Création ${String(i+1).padStart(2,"0")}</p><h3>${f.name}</h3><p>${f.text}</p></article>`);
   dots.insertAdjacentHTML("beforeend", `<b class="${i?"":"on"}"></b>`);
   cards.insertAdjacentHTML("beforeend", `<div class="card">
@@ -356,6 +360,62 @@ document.querySelectorAll("[data-order]").forEach(wire);
 /* ================= SCÈNE 1 ================= */
 const origine = $("#origine"), L1 = $("#L1"), L2 = $("#L2"), hint = $("#hint");
 const T = [$("#t0"),$("#t1"),$("#t2"),$("#t3")];
+const titleLetters = [...document.querySelectorAll(".hero-title span")];
+
+/* ================= ABEILLES ================= */
+const beeCv = $("#bees"), bctx = beeCv.getContext("2d");
+const canBlur = "filter" in bctx;
+let bees = [], beeScroll = scrollY;
+function makeBees(){
+  const w = beeCv.width, h = beeCv.height, d = Math.min(devicePixelRatio||1,2), small = innerWidth < 700;
+  const n = small ? 9 : 14, near = small ? 2 : 3;
+  bees = [];
+  for(let i=0;i<n;i++){
+    const isNear = i < near;
+    bees.push({ x:Math.random()*w, y:Math.random()*h, h:Math.random()*Math.PI*2, ph:Math.random()*99,
+      s:(isNear ? 38+Math.random()*26 : 11+Math.random()*10)*d*(small?.85:1), depth:isNear?1.6:.4+Math.random()*.5,
+      v:(isNear?1.6:.9)*d, blur:isNear?3*d:0 });
+  }
+}
+function drawBee(c,b,t){
+  const L = b.s; c.save(); c.translate(b.x,b.y); c.rotate(b.h);
+  if(canBlur && b.blur) c.filter = `blur(${b.blur}px)`;
+  // ombre douce
+  c.fillStyle = "rgba(28,18,11,.18)"; c.beginPath(); c.ellipse(L*.05,L*.18,L*.42,L*.14,0,0,7); c.fill();
+  // corps rayé
+  c.save(); c.beginPath(); c.ellipse(0,0,L*.46,L*.21,0,0,7);
+  const g = c.createLinearGradient(0,-L*.2,0,L*.2); g.addColorStop(0,"#f3c25a"); g.addColorStop(1,"#b97a1c");
+  c.fillStyle = g; c.fill(); c.clip();
+  c.fillStyle = "#2a1a0e"; [-.3,-.1,.1].forEach(x=>c.fillRect(x*L,-L*.3,L*.09,L*.6));
+  c.restore();
+  c.fillStyle = "#2a1a0e"; c.beginPath(); c.arc(L*.46,0,L*.15,0,7); c.fill();
+  c.beginPath(); c.moveTo(-L*.46,0); c.lineTo(-L*.58,0); c.lineWidth = L*.04; c.strokeStyle="#2a1a0e"; c.stroke();
+  // ailes qui battent
+  const flap = .25 + .75*Math.abs(Math.sin(t*.055 + b.ph));
+  c.fillStyle = "rgba(255,250,236,.55)"; c.strokeStyle = "rgba(255,255,255,.5)"; c.lineWidth = Math.max(1,L*.015);
+  [-1,1].forEach(sd=>{ c.save(); c.translate(L*.02,sd*L*.08); c.rotate(sd*-.35); c.scale(1,flap);
+    c.beginPath(); c.ellipse(-L*.08,sd*L*.3,L*.2,L*.32,sd*.3,0,7); c.fill(); c.stroke(); c.restore(); });
+  c.restore();
+}
+function drawBees(t, p){
+  const w = beeCv.width, h = beeCv.height; bctx.clearRect(0,0,w,h);
+  const a = 1 - seg(p,.84,.92); if(a<=0 || !bees.length) return;
+  const dy = (scrollY - beeScroll) * Math.min(devicePixelRatio||1,2); beeScroll = scrollY;
+  bctx.globalAlpha = a;
+  bees.forEach(b=>{
+    if(!reduce){
+      b.h += (Math.sin(t*.0013 + b.ph)*.04) + (Math.random()-.5)*.12;
+      const mx = w*.08, my = h*.08;                  // reste dans l'écran
+      if(b.x < mx) b.h += .08; if(b.x > w-mx) b.h -= .08;
+      if(b.y < my) b.h += b.h>-Math.PI/2 ? .08 : -.08; if(b.y > h-my) b.h -= .06;
+      const sp = b.v * (.45 + .55*Math.abs(Math.sin(t*.0009 + b.ph)));   // vol puis vol stationnaire
+      b.x += Math.cos(b.h)*sp; b.y += Math.sin(b.h)*sp + Math.sin(t*.006 + b.ph)*.6 - dy*b.depth*.35;
+      if(b.y < -80) b.y = h+60; if(b.y > h+80) b.y = -60;
+    }
+    drawBee(bctx,b,t);
+  });
+  bctx.globalAlpha = 1;
+}
 const honey = $("#honey"), hctx = honey.getContext("2d");
 const seq = $("#seq"), sctx = seq.getContext("2d");
 const frames = [];
@@ -380,7 +440,7 @@ function drawFrame(p){
   const cw = seq.width, ch = seq.height, s = Math.max(cw/im.width, ch/im.height);
   sctx.drawImage(im,(cw-im.width*s)/2,(ch-im.height*s)/2,im.width*s,im.height*s);
 }
-function show(el,o,y=0){ el.style.opacity = o; el.style.transform = `translateY(${y}px)`; }
+function show(el,o,y=0){ el.style.opacity = o; el.style.transform = `translateY(${y}px)`; el.style.filter = o>.99||o<.01 ? "none" : `blur(${(1-o)*10}px)`; }
 
 // La coulée de miel qui remplit l'écran à la fin de la scène 1
 function drawHoney(t, time){
@@ -425,6 +485,11 @@ function scene1(time){
   show(T[2], Math.min(inn(K[6],K[7]), out(K[8],K[9])), (1-inn(K[6],K[7]))*30);
   show(T[3], inn(K[10],K[11]), (1-inn(K[10],K[11]))*30);
   hint.style.opacity = 1 - seg(p,0,.05);
+  // les lettres de KŌMI s'écartent et s'envolent une à une
+  const tl = seg(p,0,.12);
+  titleLetters.forEach((el,i)=>{ const k = clamp(tl*1.6 - i*.15); el.style.transform = `translate(${(i-1.5)*k*28}px,${-k*(60+i*30)}px) rotate(${(i-1.5)*k*6}deg)`; el.style.filter = k>0 ? `blur(${k*6}px)` : "none"; });
+  if(vid) seq.style.transform = `scale(${1 + ease(seg(p,0,.82))*.08})`;
+  drawBees(time, p);
   drawHoney(vid ? seg(p,.84,.98) : seg(p,.66,.9), time);
   return p;
 }
@@ -450,15 +515,20 @@ function spawn(kind, w, h, fromTop){
 function setFlavor(i){
   if(i===current) return; current = i; const f = FLAVORS[i];
   creations.querySelector(".stage").style.setProperty("--tint", f.tint);
-  jarEls.forEach((e,k)=>e.classList.toggle("on",k===i));
   textEls.forEach((e,k)=>e.classList.toggle("on",k===i));
   dotEls.forEach((e,k)=>e.classList.toggle("on",k===i));
   $("#cnum").textContent = String(i+1).padStart(2,"0");
   $("#corig").textContent = "Origine " + f.origin;
-  // une pluie d'ingrédients à chaque changement de saveur
-  const w = fx.width, h = fx.height, n = innerWidth<700?26:46;
-  parts = parts.filter(p=>p.y<h*.6).slice(0,20);
-  for(let k=0;k<n;k++){ const p = spawn(f.fx[k%f.fx.length], w, h, true); p.y = -Math.random()*h*.8; parts.push(p); }
+  // les ingrédients jaillissent de derrière le pot
+  const w = fx.width, h = fx.height, n = innerWidth<700?34:60;
+  const jb = jars.getBoundingClientRect(), d = Math.min(devicePixelRatio||1,2);
+  const cx = (jb.left + jb.width/2)*d, cy = (jb.top + jb.height*.45)*d;
+  parts = parts.slice(-12);
+  for(let k=0;k<n;k++){
+    const p = spawn(f.fx[k%f.fx.length], w, h, false), ang = Math.random()*Math.PI*2, sp = (4+Math.random()*9)*d;
+    p.x = cx + Math.cos(ang)*jb.width*.15*d; p.y = cy + Math.sin(ang)*jb.height*.15*d;
+    p.bx = Math.cos(ang)*sp; p.by = Math.sin(ang)*sp - 3*d; p.z = .7+Math.random()*.7; parts.push(p);
+  }
 }
 function drawPart(p){
   const c = fctx; c.save(); c.translate(p.x,p.y); c.rotate(p.r); c.globalAlpha = .55+.45*Math.min(1,p.z); const s = p.s*p.z;
@@ -482,13 +552,28 @@ function scene2(){
   const r = creations.getBoundingClientRect();
   if(r.bottom < 0 || r.top > innerHeight) return;
   const p = progress(creations);
-  setFlavor(Math.min(FLAVORS.length-1, Math.floor(p*FLAVORS.length*.999)));
+  // carrousel : les pots tournent sur un arc, avec un temps d'arrêt sur chacun
+  const N = FLAVORS.length, raw = p*(N-1), base = Math.floor(raw), fr = raw-base;
+  const q = Math.min(N-1, base + ease(clamp((fr-.25)/.5)));
+  setFlavor(Math.round(q));
+  const W = jars.clientWidth, small = innerWidth < 820;
+  jarEls.forEach((el,k)=>{
+    const o = k - q, a = Math.abs(o);
+    const x = o * W * (small ? .82 : .78), z = -a * (small ? 260 : 320), ry = -o * 34;
+    el.style.transform = `translate3d(${x}px,${a*14}px,${z}px) rotateY(${ry}deg)`;
+    el.style.opacity = clamp(1.25 - Math.max(0,a-1)*1.2) * (a<.5 ? 1 : .85);
+    el.style.filter = a < .05 ? "none" : `blur(${Math.min(6,a*3.2)}px) brightness(${1 - Math.min(.45,a*.3)})`;
+    el.style.zIndex = String(10 - Math.round(a*2));
+  });
   const w = fx.width, h = fx.height, push = clamp(Math.abs(scrollY-lastY)/20,0,3);
   fctx.clearRect(0,0,w,h);
   const f = FLAVORS[current];
   if(!reduce && parts.length<(innerWidth<700?22:36) && Math.random()<.08) parts.push(spawn(f.fx[Math.floor(Math.random()*f.fx.length)], w, h, true));
   parts.forEach(q=>{
-    if(!reduce){ q.y += (1.1+push*2.2)*q.z*(devicePixelRatio>1?1.5:1); q.x += q.vx + Math.sin((q.y+q.x)/140)*.35; q.r += q.vr*(1+push); }
+    if(!reduce){
+      if(q.bx !== undefined){ q.x += q.bx; q.y += q.by; q.bx *= .955; q.by = q.by*.955 + .18; q.r += q.vr*4; if(Math.abs(q.bx)<.3 && q.by>0 && q.by<1.4) q.bx = undefined; }
+      else { q.y += (1.1+push*2.2)*q.z*(devicePixelRatio>1?1.5:1); q.x += q.vx + Math.sin((q.y+q.x)/140)*.35; q.r += q.vr*(1+push); }
+    }
     drawPart(q);
   });
   parts = parts.filter(q=>q.y<h+60);
@@ -496,7 +581,8 @@ function scene2(){
 
 /* ================= BOUCLE ================= */
 const bar = $("#bar");
-function resize(){ fit(honey); fit(fx); if(frames.length){ fit(seq); drawFrame.last = null; } }
+let lastW = 0;
+function resize(){ fit(honey); fit(fx); fit(beeCv); if(innerWidth !== lastW || !bees.length){ lastW = innerWidth; makeBees(); } if(frames.length){ fit(seq); drawFrame.last = null; } }
 addEventListener("resize", resize); resize();
 function loop(time){
   const p1 = scene1(time||0); scene2();
