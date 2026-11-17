@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Paiement — KŌMI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Lato:wght@400;700&display=swap">
+<style>
+/* Aperçu du paiement Shopify (Checkout) aux couleurs KŌMI : logo, bouton noir, accent orange.
+   Sur Shopify, cette page est générée par Shopify ; on ne règle que le logo, les couleurs et les polices. */
+:root{--black:#111;--orange:#FF7900;--line:#e2ddd6;--soft:#6b6460;--bg:#fff;--side:#F9F6F1;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Lato","Helvetica Neue",Arial,sans-serif;color:var(--black);background:var(--bg);font-size:15px;line-height:1.5}
+a{color:var(--black)}
+h1,h2{font-family:"Montserrat",Arial,sans-serif;font-weight:600;margin:0}
+.top{border-bottom:1px solid var(--line);padding:18px max(18px,env(safe-area-inset-right,0px)) 18px max(18px,env(safe-area-inset-left,0px));padding-top:calc(18px + env(safe-area-inset-top,0px))}
+.top .in{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:"Montserrat",Arial,sans-serif;font-weight:600;font-size:1.7rem;letter-spacing:.04em;text-decoration:none}
+.top svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8}
+.page{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 70px)}
+.left{padding:34px max(18px,env(safe-area-inset-left,0px)) 60px;display:flex;justify-content:flex-end}
+.right{background:var(--side);border-left:1px solid var(--line);padding:34px max(18px,env(safe-area-inset-right,0px)) 60px 40px}
+.col{width:100%;max-width:540px;display:grid;gap:26px;padding-right:40px}
+.right .col{max-width:440px;padding-right:0}
+.express p{text-align:center;color:var(--soft);font-size:.86rem;margin:0 0 10px}
+.exp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.exp div{height:46px;border-radius:6px;display:grid;place-items:center;font-family:"Montserrat",Arial,sans-serif;font-weight:700;font-size:.95rem;color:#fff}
+.or{display:flex;align-items:center;gap:12px;color:var(--soft);font-size:.86rem}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+fieldset{border:0;padding:0;margin:0;display:grid;gap:12px}
+legend{font-family:"Montserrat",Arial,sans-serif;font-weight:600;font-size:1.2rem;margin-bottom:12px;padding:0}
+.f{position:relative}
+.f input,.f select{width:100%;border:1px solid var(--line);border-radius:6px;padding:14px 12px;font:inherit;background:#fff;color:var(--black)}
+.f input:focus,.f select:focus{outline:2px solid var(--black);outline-offset:-1px;border-color:transparent}
+.f input:disabled{background:#f6f4f1;color:#9a928d}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.box{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.box .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px;border-bottom:1px solid var(--line)}
+.box .row:last-child{border-bottom:0}
+.box .row.sel{background:#fff7ef;box-shadow:inset 0 0 0 1.5px var(--orange)}
+.box .in{padding:14px;background:#f8f6f3;display:grid;gap:12px}
+.note{font-size:.84rem;color:var(--soft);margin:0}
+.paybtn{width:100%;border:0;border-radius:8px;background:var(--black);color:#fff;padding:18px;font-family:"Montserrat",Arial,sans-serif;font-weight:600;font-size:1rem;cursor:pointer}
+.demo{background:#fff4e6;border:1px solid #ffd2a3;border-radius:8px;padding:12px 14px;font-size:.88rem;margin:0}
+.items{display:grid;gap:14px}
+.it{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center}
+.it .th{position:relative;width:64px;height:64px;border-radius:10px;background:var(--c);border:1px solid var(--line);display:grid;place-items:end center}
+.it .th img{width:62%}
+.it .th b{position:absolute;top:-8px;right:-8px;min-width:22px;height:22px;border-radius:11px;background:#6b6460;color:#fff;font-size:.75rem;display:grid;place-items:center;padding:0 6px}
+.it span{font-variant-numeric:tabular-nums}
+.code{display:grid;grid-template-columns:1fr auto;gap:10px}
+.code button{border:0;border-radius:6px;background:#e9e4dd;font:inherit;font-weight:700;padding:0 18px;cursor:pointer}
+.tot{display:grid;gap:8px;font-variant-numeric:tabular-nums}
+.tot div{display:flex;justify-content:space-between}
+.tot .big{font-family:"Montserrat",Arial,sans-serif;font-weight:600;font-size:1.2rem;margin-top:6px}
+.tot .big small{font-weight:400;font-size:.8rem;color:var(--soft);margin-right:6px}
+.legal{display:flex;flex-wrap:wrap;gap:14px;font-size:.82rem;border-top:1px solid var(--line);padding-top:16px}
+.summary-toggle{display:none}
+@media (max-width:900px){
+  .page{grid-template-columns:1fr}
+  .right{order:-1;border-left:0;border-bottom:1px solid var(--line);padding:18px max(18px,env(safe-area-inset-right,0px)) 18px max(18px,env(safe-area-inset-left,0px))}
+  .left{justify-content:center}
+  .col{padding-right:0;max-width:none}
+  .right .col{max-width:none}
+  .summary-toggle{display:flex;justify-content:space-between;align-items:center;border:0;background:none;padding:0;font:inherit;color:var(--orange);font-weight:700;cursor:pointer;width:100%}
+  .right .col.closed>*:not(.summary-toggle){display:none}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="in"><a class="logo" href="index.html">KŌMI</a><a href="index.html" aria-label="Retour à la boutique"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></a></div></header>
+
+<div class="page">
+  <section class="left">
+    <form class="col" id="co" novalidate>
+      <p class="demo"><b>Maquette.</b> Sur le vrai site, cette page est le paiement sécurisé de Shopify. Rien n'est envoyé ici.</p>
+      <div class="express"><p>Paiement express</p>
+        <div class="exp"><div style="background:#5A31F4">Shop Pay</div><div style="background:#000">Apple Pay</div><div style="background:#000">G Pay</div></div></div>
+      <div class="or">OU</div>
+      <fieldset><legend>Contact</legend>
+        <div class="f"><label class="sr" for="em">Email</label><input id="em" type="email" placeholder="E-mail" autocomplete="email"></div>
+        <label style="display:flex;gap:8px;align-items:center;font-size:.9rem"><input type="checkbox" id="nl" checked> Recevoir les nouveautés et offres par email</label>
+      </fieldset>
+      <fieldset><legend>Livraison</legend>
+        <div class="f"><label class="sr" for="ct">Pays/région</label><select id="ct"><option>France</option><option>Belgique</option><option>Suisse</option><option>Luxembourg</option></select></div>
+        <div class="two"><div class="f"><label class="sr" for="fn">Prénom</label><input id="fn" placeholder="Prénom" autocomplete="given-name"></div><div class="f"><label class="sr" for="ln">Nom</label><input id="ln" placeholder="Nom" autocomplete="family-name"></div></div>
+        <div class="f"><label class="sr" for="ad">Adresse</label><input id="ad" placeholder="Adresse" autocomplete="address-line1"></div>
+        <div class="two"><div class="f"><label class="sr" for="zp">Code postal</label><input id="zp" placeholder="Code postal" autocomplete="postal-code"></div><div class="f"><label class="sr" for="cy">Ville</label><input id="cy" placeholder="Ville" autocomplete="address-level2"></div></div>
+      </fieldset>
+      <fieldset><legend>Mode d'expédition</legend>
+        <div class="box"><div class="row sel"><span>Livraison standard</span><span class="note">Calculée après l'adresse</span></div><div class="row"><span>Point relais</span><span class="note">Calculée après l'adresse</span></div></div>
+      </fieldset>
+      <fieldset><legend>Paiement</legend>
+        <p class="note">Toutes les transactions sont sécurisées et chiffrées.</p>
+        <div class="box">
+          <div class="row sel"><span>Carte de crédit</span><span class="note">CB · Visa · Mastercard</span></div>
+          <div class="in">
+            <div class="f"><label class="sr" for="cn">Numéro de carte</label><input id="cn" placeholder="Numéro de carte (géré par Shopify)" disabled></div>
+            <div class="two"><div class="f"><input aria-label="Date d'expiration" placeholder="Date d'expiration" disabled></div><div class="f"><input aria-label="Code de sécurité" placeholder="Code de sécurité" disabled></div></div>
+          </div>
+          <div class="row"><span>PayPal</span></div>
+        </div>
+      </fieldset>
+      <button class="paybtn" type="submit">Payer maintenant</button>
+      <p class="demo" id="msg" hidden></p>
+      <nav class="legal"><a href="#">Politique de remboursement</a><a href="#">Expédition</a><a href="#">Confidentialité</a><a href="#">Conditions d'utilisation</a></nav>
+    </form>
+  </section>
+  <aside class="right">
+    <div class="col closed" id="sum">
+      <button class="summary-toggle" type="button" id="tog"><span>Afficher le récapitulatif de commande</span><b id="totTop">0,00 €</b></button>
+      <div class="items" id="items"></div>
+      <div class="code"><div class="f"><label class="sr" for="pc">Code promo</label><input id="pc" placeholder="Code de réduction ou carte-cadeau"></div><button type="button" id="apply">Valider</button></div>
+      <p class="note" id="pcMsg" hidden></p>
+      <div class="tot"><div><span>Sous-total</span><span id="sub"></span></div><div id="discRow" hidden><span>Réduction</span><span id="disc"></span></div><div><span>Expédition</span><span class="note">Saisir l'adresse de livraison</span></div><div class="big"><span>Total</span><span><small>EUR</small><span id="tot"></span></span></div><p class="note" style="margin:0">Taxes incluses.</p></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+const PRODUCTS = [
+ {id:"oranger",name:"Miel d'Oranger",price:14.90,color:"#F59A23"},{id:"romarin",name:"Miel de Romarin",price:14.90,color:"#8DAA4B"},
+ {id:"thym",name:"Miel de Thym",price:14.90,color:"#A94FAD"},{id:"jujubier",name:"Miel de Jujubier",price:16.90,color:"#C2185B"},
+ {id:"eucalyptus",name:"Miel d'Eucalyptus",price:14.90,color:"#58AEB4"},{id:"lavande",name:"Miel de Lavande",price:14.90,color:"#F6BD21"},
+ {id:"energie",name:"Énergie",price:16.90,color:"#E93F62"},{id:"respiration",name:"Respiration",price:16.90,color:"#2859B8"},
+ {id:"digestion",name:"Digestion",price:16.90,color:"#A7BA32"},{id:"relaxation",name:"Relaxation",price:16.90,color:"#9D38A8"}];
+const euro = n => n.toFixed(2).replace(".",",") + " €";
+let items = []; try{ items = JSON.parse(localStorage.getItem("komi-cart")) || []; }catch(e){}
+if(!items.length) items = [{id:"thym",q:1},{id:"oranger",q:2}]; // exemple si le panier est vide
+let discount = 0;
+function render(){
+  const sub = items.reduce((s,i)=>s+i.q*PRODUCTS.find(p=>p.id===i.id).price,0);
+  document.getElementById("items").innerHTML = items.map(i=>{ const p = PRODUCTS.find(x=>x.id===i.id); return `<div class="it" style="--c:${p.color}"><div class="th"><img src="img/jar-${p.id}.webp" alt=""><b>${i.q}</b></div><div>${p.name}<br><span class="note">250 g</span></div><span>${euro(p.price*i.q)}</span></div>`; }).join("");
+  document.getElementById("sub").textContent = euro(sub);
+  document.getElementById("discRow").hidden = !discount;
+  document.getElementById("disc").textContent = "− " + euro(sub*discount);
+  const t = euro(sub*(1-discount)); document.getElementById("tot").textContent = t; document.getElementById("totTop").textContent = t;
+}
+render();
+document.getElementById("tog").addEventListener("click", ()=>document.getElementById("sum").classList.toggle("closed"));
+document.getElementById("apply").addEventListener("click", ()=>{
+  const v = document.getElementById("pc").value.trim().toUpperCase(), m = document.getElementById("pcMsg"); m.hidden = false;
+  if(v === "BIENVENUE10"){ discount = .1; m.textContent = "Code BIENVENUE10 appliqué : −10 %."; }
+  else { discount = 0; m.textContent = v ? "Ce code n'existe pas. Pour la démo, essayez BIENVENUE10." : "Entrez un code. Pour la démo, essayez BIENVENUE10."; }
+  render();
+});
+document.getElementById("co").addEventListener("submit", e=>{ e.preventDefault(); const m = document.getElementById("msg"); m.hidden = false; m.textContent = "Démo : sur le vrai site, Shopify traite le paiement ici et envoie l'email de confirmation de commande."; });
+</script>
+<style>.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}[hidden]{display:none!important}</style>
+</body>
+</html>

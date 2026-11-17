@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>KŌMI — Miel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Lato:wght@400;700&display=swap">
+<link rel="stylesheet" href="assets/komi.css">
+<style>
+/* ===== Fiche produit (templates/product.json + sections/main-product) — fond crème, épurée ===== */
+.crumbs{font-size:.84rem;color:var(--ink-soft);padding-block:18px 8px}
+.crumbs a{text-decoration:none}
+.pdp{display:grid;grid-template-columns:1.15fr 1fr;gap:56px;align-items:start;padding-bottom:80px}
+.gallery{position:sticky;top:84px;display:grid;gap:12px}
+.slides{display:grid;grid-auto-flow:column;grid-auto-columns:100%;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:var(--r);scrollbar-width:none}
+.slides::-webkit-scrollbar{display:none}
+.slide{scroll-snap-align:start;aspect-ratio:1/1.02;position:relative;display:grid;place-items:center;overflow:hidden;border-radius:var(--r)}
+.slide.c1{background:var(--c)}
+.slide.c1::before{content:"";position:absolute;width:110%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.2);left:-50%;top:-50%}
+.slide.c1::after{content:"";position:absolute;width:60%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.15);right:-18%;bottom:-18%}
+.slide.c1 img{position:relative;z-index:1;width:56%;filter:drop-shadow(0 30px 30px rgba(0,0,0,.25));animation:float 5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-12px) rotate(-1.5deg)}}
+.slide.c2{background:var(--white)}
+.slide.c2 .zoom{width:100%;height:100%;background-repeat:no-repeat;background-size:190%;background-position:50% 62%}
+.slide.c3{background:linear-gradient(150deg,#FF7900,#EF2970)}
+.slide.c3 img{width:46%;filter:drop-shadow(0 30px 30px rgba(80,0,20,.35))}
+.thumbs{display:flex;gap:10px}
+.thumbs button{width:72px;height:72px;border-radius:16px;border:0;padding:0;overflow:hidden;box-shadow:inset 0 0 0 2px transparent;opacity:.65;transition:opacity .2s}
+.thumbs button.on{opacity:1;box-shadow:0 0 0 2px var(--black)}
+.thumbs .t1{background:var(--c)} .thumbs .t2{background:var(--white)} .thumbs .t3{background:linear-gradient(150deg,#FF7900,#EF2970)}
+.thumbs img{width:62%;margin:auto}
+.buy{display:flex;flex-direction:column;gap:18px;min-width:0}
+.buy .fam{display:inline-flex;align-items:center;gap:8px;font-family:var(--title);font-weight:600;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase}
+.buy .fam i{width:12px;height:12px;border-radius:50%;background:var(--c)}
+.buy h1{font-size:clamp(2.2rem,4.4vw,3.6rem)}
+.buy .ing{font-family:var(--title);font-weight:600;margin:0}
+.buy .pp{display:flex;align-items:baseline;gap:12px}
+.buy .pp b{font-family:var(--title);font-size:1.6rem;font-variant-numeric:tabular-nums}
+.buy .pp small{color:var(--ink-soft)}
+.buy p.desc{margin:0;color:var(--ink-soft);max-width:48ch}
+.formats{display:flex;gap:8px;flex-wrap:wrap}
+.formats button{border:0;border-radius:999px;padding:11px 18px;background:var(--white);font-family:var(--title);font-weight:600;font-size:.86rem;box-shadow:inset 0 0 0 1.5px var(--line)}
+.formats button[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--black)}
+.formats button:disabled{opacity:.45;text-decoration:line-through;cursor:not-allowed}
+.actions{display:grid;grid-template-columns:auto 1fr;gap:10px}
+.actions .qty{margin:0;background:var(--white)}
+.actions .qty button{width:44px;height:50px}
+.actions .orange{grid-column:1/-1}
+.perks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.perks div{background:var(--white);border-radius:16px;padding:12px;font-size:.82rem;text-align:center;font-family:var(--title);font-weight:600}
+.perks svg{width:22px;height:22px;display:block;margin:0 auto 6px;fill:none;stroke:var(--c);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+details{border-top:1px solid var(--line);padding:4px 0}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:14px 0;font-family:var(--title);font-weight:600}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:1.4rem;font-weight:500;transition:transform .25s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin:0 0 14px;color:var(--ink-soft);max-width:56ch}
+.sticky-buy{position:fixed;left:0;right:0;bottom:0;z-index:25;display:none;align-items:center;gap:12px;background:var(--white);box-shadow:0 -10px 30px -20px rgba(0,0,0,.4);padding:10px var(--gutter-r) calc(10px + env(safe-area-inset-bottom,0px)) var(--gutter-l);transform:translateY(110%);transition:transform .35s}
+.sticky-buy.on{transform:none}
+.sticky-buy img{width:40px}
+.sticky-buy div{flex:1;min-width:0;font-family:var(--title);font-weight:600;font-size:.88rem;line-height:1.2}
+.sticky-buy .btn{padding:12px 18px}
+.related{padding-block:20px 90px}
+.related h2{font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:24px}
+.related .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:900px){
+  .pdp{grid-template-columns:1fr;gap:26px}
+  .gallery{position:static}
+  .sticky-buy{display:flex}
+  .related .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+</head>
+<body data-page="product">
+
+<div class="announce"><span>Livraison en France · Paiement sécurisé · Coffrets cadeaux</span></div>
+<header class="hdr">
+  <div class="wrap">
+    <button class="icon burger" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <nav><a href="index.html#boutique">Boutique</a><a href="index.html#coffrets">Coffrets</a><a href="index.html#recettes">Recettes</a><a href="index.html#histoire">Notre histoire</a></nav>
+    <a class="logo" href="index.html" aria-label="KŌMI, accueil">KŌMI</a>
+    <div class="tools">
+      <button class="icon hide-s" aria-label="Rechercher"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></button>
+      <button class="icon hide-s" aria-label="Mon compte"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.4-3.6 4.2-5.3 7.5-5.3s6.1 1.7 7.5 5.3"/></svg></button>
+      <button class="icon cart" aria-label="Panier, 0 article"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span class="n">0</span></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="main"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><a class="logo" href="index.html">KŌMI</a><p style="margin:0;color:var(--ink-soft);max-width:30ch">Miels premium accessibles. Paiement sécurisé, livraison en France.</p></div>
+      <div><h4>Boutique</h4><ul><li><a href="index.html#boutique">Tous les miels</a></li><li><a href="index.html#coffrets">Coffrets &amp; packs</a></li><li><a href="index.html#recettes">Recettes</a></li></ul></div>
+      <div><h4>Aide</h4><ul><li><a href="#">FAQ</a></li><li><a href="#">Livraison &amp; retours</a></li><li><a href="#">Contact</a></li></ul></div>
+      <div><h4>Informations</h4><ul><li><a href="#">CGV</a></li><li><a href="#">Mentions légales</a></li><li><a href="#">Confidentialité</a></li><li><a href="#">Cookies</a></li></ul></div>
+    </div>
+    <div class="fine"><span>© 2026 KŌMI · Instagram · TikTok</span><span class="pay"><span>CB</span><span>Visa</span><span>Mastercard</span><span>Apple Pay</span><span>Google Pay</span></span><span>Maquette réalisée par Goual</span></div>
+  </div>
+</footer>
+
+<script src="assets/komi.js"></script>
+<script>
+const id = new URLSearchParams(location.search).get("p");
+const P = byId(id) || PRODUCTS[0];
+document.title = `${P.name} — KŌMI`;
+document.body.style.setProperty("--c", P.color);
+const fg = textOn(P.color);
+$("#main").innerHTML = `
+  <nav class="crumbs" aria-label="Fil d'Ariane"><a href="index.html">Accueil</a> / <a href="index.html#boutique">Boutique</a> / ${P.name}</nav>
+  <div class="pdp">
+    <div class="gallery">
+      <div class="slides" id="slides">
+        <div class="slide c1"><img src="${jarSrc(P)}" alt="${P.name}, pot de 250 g"></div>
+        <div class="slide c2"><div class="zoom" style="background-image:url(${jarSrc(P)})" role="img" aria-label="Détail de l'étiquette ${P.name}"></div></div>
+        <div class="slide c3"><img src="${jarSrc(P)}" alt="" loading="lazy"></div>
+      </div>
+      <div class="thumbs" id="thumbs">
+        <button class="t1 on" aria-label="Photo 1"><img src="${jarSrc(P)}" alt=""></button>
+        <button class="t2" aria-label="Photo 2"><img src="${jarSrc(P)}" alt=""></button>
+        <button class="t3" aria-label="Photo 3"><img src="${jarSrc(P)}" alt=""></button>
+      </div>
+    </div>
+    <div class="buy">
+      <span class="fam"><i></i>${FAM[P.fam]}</span>
+      <h1>${P.name}</h1>
+      <p class="ing">${P.ing}</p>
+      <div class="pp"><b>${euro(P.price)}</b><small>Taxes incluses · 250 g</small></div>
+      <p class="desc">${P.text}</p>
+      <div><p class="eyebrow" style="margin-bottom:10px">Format</p>
+        <div class="formats"><button aria-pressed="true">Pot 250 g</button><button disabled title="Bientôt disponible">Pot 500 g</button></div></div>
+      <div class="actions">
+        <div class="qty"><button id="minus" aria-label="Diminuer la quantité">−</button><span id="qn">1</span><button id="plus" aria-label="Augmenter la quantité">+</button></div>
+        <button class="btn dark" id="addBtn" data-add="${P.id}" data-qty="1">Ajouter au panier</button>
+        <a class="btn orange" id="buyNow" href="paiement.html">Acheter maintenant</a>
+      </div>
+      <div class="perks">
+        <div><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Paiement sécurisé</div>
+        <div><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>Livraison en France</div>
+        <div><svg viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M12 9v11M4 13h16M12 9c-2-4-6-4-6-1s6 1 6 1Zm0 0c2-4 6-4 6-1s-6 1-6 1Z"/></svg>Idée cadeau</div>
+      </div>
+      <div>
+        <details open><summary>Description</summary><p>${P.text} Un pot en verre de 250 g, fermé d'un couvercle doré satiné et d'une bande de couleur ${P.name.replace(/^Miel /,"").toLowerCase()}.</p></details>
+        <details><summary>Composition</summary><p>${P.ing.replace(" · ", " — origine : ")}. La liste complète des ingrédients et les mentions réglementaires seront ajoutées après validation.</p></details>
+        <details><summary>Dégustation &amp; conservation</summary><p>À déguster nature, sur une tartine, dans un yaourt ou une boisson chaude (pas bouillante). Conserver à température ambiante, à l'abri de la lumière. Le miel peut cristalliser naturellement.</p></details>
+        <details><summary>Livraison &amp; retours</summary><p>Expédition en France. Les délais et tarifs seront précisés à l'étape du paiement.</p></details>
+      </div>
+    </div>
+  </div>
+  <section class="related"><h2>Vous aimerez aussi</h2><div class="grid">${PRODUCTS.filter(x=>x.id!==P.id).sort((a,b)=>(a.fam===P.fam?-1:1)-(b.fam===P.fam?-1:1)).slice(0,4).map(cardHTML).join("")}</div></section>
+  <div class="sticky-buy" id="stickyBuy"><img src="${jarSrc(P)}" alt=""><div>${P.name}<br><span style="font-weight:500;color:var(--ink-soft)">${euro(P.price)}</span></div><button class="btn dark" data-add="${P.id}">Ajouter</button></div>`;
+
+/* galerie : défilement + vignettes */
+const slides = $("#slides"), thumbs = $$("#thumbs button");
+thumbs.forEach((b,i)=>b.addEventListener("click", ()=>slides.scrollTo({ left: slides.clientWidth*i, behavior: reduceMotion ? "auto" : "smooth" })));
+slides.addEventListener("scroll", ()=>{ const i = Math.round(slides.scrollLeft / slides.clientWidth); thumbs.forEach((b,k)=>b.classList.toggle("on", k===i)); }, { passive:true });
+/* quantité */
+let q = 1; const qn = $("#qn"), addBtn = $("#addBtn");
+function setQ(v){ q = Math.max(1, Math.min(20, v)); qn.textContent = q; addBtn.dataset.qty = q; }
+$("#minus").addEventListener("click", ()=>setQ(q-1)); $("#plus").addEventListener("click", ()=>setQ(q+1));
+/* acheter maintenant : ajoute puis part au paiement (comme le bouton de paiement dynamique Shopify) */
+$("#buyNow").addEventListener("click", e=>{ e.preventDefault(); Cart.add(P.id, q); location.href = "paiement.html"; });
+/* barre d'achat collante sur mobile quand le bouton principal sort de l'écran */
+new IntersectionObserver(([en])=>$("#stickyBuy").classList.toggle("on", !en.isIntersecting && en.boundingClientRect.top < 0)).observe(addBtn);
+</script>
+</body>
+</html>
