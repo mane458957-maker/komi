@@ -131,8 +131,8 @@ let items = []; try{ items = JSON.parse(localStorage.getItem("komi-cart")) || []
 if(!items.length) items = [{id:"thym",q:1},{id:"oranger",q:2}]; // exemple si le panier est vide
 let discount = 0;
 function render(){
-  const sub = items.reduce((s,i)=>s+i.q*PRODUCTS.find(p=>p.id===i.id).price,0);
-  document.getElementById("items").innerHTML = items.map(i=>{ const p = PRODUCTS.find(x=>x.id===i.id); return `<div class="it" style="--c:${p.color}"><div class="th"><img src="img/jar-${p.id}.webp" alt=""><b>${i.q}</b></div><div>${p.name}<br><span class="note">250 g</span></div><span>${euro(p.price*i.q)}</span></div>`; }).join("");
+  const sub = items.reduce((s,i)=>s+i.q*(i.bundle ? i.price : PRODUCTS.find(p=>p.id===i.id).price),0);
+  document.getElementById("items").innerHTML = items.map(i=>{ if(i.bundle){ const ps = i.bundle.map(id=>PRODUCTS.find(x=>x.id===id)); return `<div class="it" style="--c:${ps[0].color}"><div class="th" style="background:linear-gradient(150deg,#FF7900,#EF2970)"><img src="img/jar-${ps[1].id}.webp" alt=""><b>${i.q}</b></div><div>${i.name}<br><span class="note">${ps.map(x=>x.name.replace(/^Miel /,"")).join(" · ")}</span></div><span>${euro(i.price*i.q)}</span></div>`; } const p = PRODUCTS.find(x=>x.id===i.id); return `<div class="it" style="--c:${p.color}"><div class="th"><img src="img/jar-${p.id}.webp" alt=""><b>${i.q}</b></div><div>${p.name}<br><span class="note">250 g</span></div><span>${euro(p.price*i.q)}</span></div>`; }).join("");
   document.getElementById("sub").textContent = euro(sub);
   document.getElementById("discRow").hidden = !discount;
   document.getElementById("disc").textContent = "− " + euro(sub*discount);

@@ -5,72 +5,179 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>KŌMI — Miel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Lato:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Lato:wght@400;700&display=swap">
 <link rel="stylesheet" href="assets/komi.css">
 <style>
-/* ===== Fiche produit (templates/product.json + sections/main-product) — fond crème, épurée ===== */
-.crumbs{font-size:.84rem;color:var(--ink-soft);padding-block:18px 8px}
+/* ===== Fiche produit (templates/product.json) : structure orientée vente, traitement épuré et premium ===== */
+.crumbs{font-size:.82rem;color:var(--ink-soft);padding-block:18px 10px}
 .crumbs a{text-decoration:none}
-.pdp{display:grid;grid-template-columns:1.15fr 1fr;gap:56px;align-items:start;padding-bottom:80px}
-.gallery{position:sticky;top:84px;display:grid;gap:12px}
+.pdp{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:start;padding-bottom:70px}
+
+/* galerie */
+.gallery{position:sticky;top:78px;display:grid;grid-template-columns:72px 1fr;gap:14px}
+.thumbs{display:flex;flex-direction:column;gap:10px}
+.thumbs button{width:72px;height:86px;border-radius:14px;border:0;padding:0;overflow:hidden;opacity:.6;transition:opacity .2s,box-shadow .2s;display:grid;place-items:center}
+.thumbs button.on{opacity:1;box-shadow:0 0 0 2px var(--black)}
+.thumbs img{width:62%}
 .slides{display:grid;grid-auto-flow:column;grid-auto-columns:100%;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:var(--r);scrollbar-width:none}
 .slides::-webkit-scrollbar{display:none}
-.slide{scroll-snap-align:start;aspect-ratio:1/1.02;position:relative;display:grid;place-items:center;overflow:hidden;border-radius:var(--r)}
-.slide.c1{background:var(--c)}
-.slide.c1::before{content:"";position:absolute;width:110%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.2);left:-50%;top:-50%}
-.slide.c1::after{content:"";position:absolute;width:60%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.15);right:-18%;bottom:-18%}
-.slide.c1 img{position:relative;z-index:1;width:56%;filter:drop-shadow(0 30px 30px rgba(0,0,0,.25));animation:float 5s ease-in-out infinite}
+.slide{scroll-snap-align:start;aspect-ratio:4/4.6;position:relative;display:grid;place-items:center;overflow:hidden;border-radius:var(--r)}
+.s-color{background:var(--c)}
+.s-color::before{content:"";position:absolute;width:115%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.2);left:-52%;top:-48%}
+.s-color::after{content:"";position:absolute;width:62%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.14);right:-20%;bottom:-16%}
+.s-color img{position:relative;z-index:1;width:54%;filter:drop-shadow(0 34px 34px rgba(0,0,0,.25));animation:float 6s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-12px) rotate(-1.5deg)}}
-.slide.c2{background:var(--white)}
-.slide.c2 .zoom{width:100%;height:100%;background-repeat:no-repeat;background-size:190%;background-position:50% 62%}
-.slide.c3{background:linear-gradient(150deg,#FF7900,#EF2970)}
-.slide.c3 img{width:46%;filter:drop-shadow(0 30px 30px rgba(80,0,20,.35))}
-.thumbs{display:flex;gap:10px}
-.thumbs button{width:72px;height:72px;border-radius:16px;border:0;padding:0;overflow:hidden;box-shadow:inset 0 0 0 2px transparent;opacity:.65;transition:opacity .2s}
-.thumbs button.on{opacity:1;box-shadow:0 0 0 2px var(--black)}
-.thumbs .t1{background:var(--c)} .thumbs .t2{background:var(--white)} .thumbs .t3{background:linear-gradient(150deg,#FF7900,#EF2970)}
-.thumbs img{width:62%;margin:auto}
-.buy{display:flex;flex-direction:column;gap:18px;min-width:0}
-.buy .fam{display:inline-flex;align-items:center;gap:8px;font-family:var(--title);font-weight:600;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase}
-.buy .fam i{width:12px;height:12px;border-radius:50%;background:var(--c)}
-.buy h1{font-size:clamp(2.2rem,4.4vw,3.6rem)}
-.buy .ing{font-family:var(--title);font-weight:600;margin:0}
-.buy .pp{display:flex;align-items:baseline;gap:12px}
-.buy .pp b{font-family:var(--title);font-size:1.6rem;font-variant-numeric:tabular-nums}
-.buy .pp small{color:var(--ink-soft)}
-.buy p.desc{margin:0;color:var(--ink-soft);max-width:48ch}
-.formats{display:flex;gap:8px;flex-wrap:wrap}
-.formats button{border:0;border-radius:999px;padding:11px 18px;background:var(--white);font-family:var(--title);font-weight:600;font-size:.86rem;box-shadow:inset 0 0 0 1.5px var(--line)}
-.formats button[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--black)}
-.formats button:disabled{opacity:.45;text-decoration:line-through;cursor:not-allowed}
-.actions{display:grid;grid-template-columns:auto 1fr;gap:10px}
-.actions .qty{margin:0;background:var(--white)}
-.actions .qty button{width:44px;height:50px}
-.actions .orange{grid-column:1/-1}
-.perks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.perks div{background:var(--white);border-radius:16px;padding:12px;font-size:.82rem;text-align:center;font-family:var(--title);font-weight:600}
-.perks svg{width:22px;height:22px;display:block;margin:0 auto 6px;fill:none;stroke:var(--c);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-details{border-top:1px solid var(--line);padding:4px 0}
+.s-zoom{background:var(--white)}
+.s-zoom .zoom{width:100%;height:100%;background-repeat:no-repeat;background-size:200%;background-position:50% 64%}
+.s-brand{background:linear-gradient(150deg,#FF7900 0%,#F5507A 65%,#EF2970 100%)}
+.s-brand::before{content:"";position:absolute;width:90%;aspect-ratio:1;border-radius:50%;background:var(--powder);opacity:.55;left:-30%;bottom:-40%}
+.s-brand img{position:relative;width:46%;filter:drop-shadow(0 34px 34px rgba(80,0,20,.35))}
+.s-trio{background:var(--white);align-items:end;padding-bottom:12%}
+.s-trio .row3{display:flex;align-items:flex-end;justify-content:center;width:86%}
+.s-trio img{width:34%;margin:0 -2%;filter:drop-shadow(0 22px 22px rgba(0,0,0,.18))}
+.s-trio img:nth-child(2){width:40%;position:relative;z-index:1}
+.s-trio .lbl{position:absolute;top:8%;left:0;right:0;text-align:center}
+.pager{display:none;justify-content:center;gap:6px;margin-top:10px}
+.pager i{width:7px;height:7px;border-radius:50%;background:rgba(17,17,17,.2);transition:background .2s,width .2s}
+.pager i.on{background:var(--black);width:20px;border-radius:4px}
+
+/* bloc d'achat */
+.buy{display:flex;flex-direction:column;gap:20px;min-width:0}
+.buy .top{display:flex;flex-direction:column;gap:8px}
+.fam{display:inline-flex;align-items:center;gap:8px;font-family:var(--title);font-weight:600;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase}
+.fam i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.buy h1{font-size:clamp(2.3rem,4.2vw,3.5rem);letter-spacing:-.02em}
+.tagline{margin:0;font-size:1.08rem;color:var(--ink-soft)}
+.rating{display:flex;align-items:center;gap:10px;font-size:.86rem;color:var(--ink-soft)}
+.stars{display:flex;gap:2px}
+.stars svg{width:15px;height:15px;fill:none;stroke:var(--black);stroke-width:1.5}
+.rating a{color:var(--black)}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tags span{border-radius:999px;padding:7px 14px;background:var(--white);font-family:var(--title);font-weight:600;font-size:.78rem;box-shadow:inset 0 0 0 1.5px var(--line)}
+.label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;font-family:var(--title);font-weight:600;font-size:.86rem}
+.label span{font-weight:500;color:var(--ink-soft)}
+.swatches{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:8px}
+.sw{aspect-ratio:1;border-radius:50%;border:0;padding:0;background:var(--sc);box-shadow:inset 0 0 0 3px var(--cream),0 0 0 1.5px var(--line);transition:transform .2s,box-shadow .2s}
+.sw:hover{transform:scale(1.08)}
+.sw[aria-checked="true"]{box-shadow:inset 0 0 0 3px var(--cream),0 0 0 2px var(--black)}
+.offers{display:grid;gap:10px}
+.offer{position:relative;display:grid;grid-template-columns:22px 64px 1fr auto;gap:14px;align-items:center;background:var(--white);border-radius:20px;padding:14px 16px;cursor:pointer;box-shadow:inset 0 0 0 1.5px var(--line);transition:box-shadow .2s}
+.offer input{position:absolute;opacity:0;pointer-events:none}
+.offer .dot{width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 1.5px rgba(17,17,17,.35)}
+.offer.on{box-shadow:inset 0 0 0 2px var(--black)}
+.offer.on .dot{box-shadow:inset 0 0 0 6px var(--black)}
+.offer .vis{height:64px;border-radius:14px;background:var(--c);display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.offer .vis img{width:62%}
+.offer .vis.trio{background:linear-gradient(150deg,#FF7900,#EF2970)}
+.offer .vis.trio img{width:34%;margin:0 -4%}
+.offer b{display:block;font-family:var(--title);font-size:.98rem}
+.offer small{color:var(--ink-soft);font-size:.82rem}
+.offer .pr{text-align:right;font-family:var(--title);font-weight:600;font-variant-numeric:tabular-nums}
+.offer .pr s{display:block;font-weight:500;font-size:.8rem;color:var(--ink-soft)}
+.badge{position:absolute;top:-10px;right:16px;background:var(--fuchsia);color:var(--white);border-radius:999px;padding:3px 10px;font-family:var(--title);font-weight:600;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase}
+.builder{background:var(--white);border-radius:20px;padding:16px;display:grid;gap:12px}
+.builder .bh{display:flex;justify-content:space-between;align-items:center;font-family:var(--title);font-weight:600;font-size:.9rem}
+.meter{height:6px;border-radius:3px;background:rgba(17,17,17,.08);overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--fuchsia);transition:width .3s}
+.picks{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.pick{position:relative;border:0;border-radius:14px;padding:6px 4px 4px;background:var(--pc);display:flex;flex-direction:column;align-items:center;gap:2px;transition:transform .2s;min-width:0}
+.pick img{width:62%}
+.pick span{font-family:var(--title);font-weight:600;font-size:.6rem;line-height:1.1;color:var(--pf);text-align:center;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pick b{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;border-radius:10px;background:var(--black);color:var(--white);font:700 .7rem/20px var(--title);display:none}
+.pick.has b{display:block}
+.pick:disabled{opacity:.4;cursor:not-allowed}
+.chosen{display:flex;gap:6px;flex-wrap:wrap;min-height:30px}
+.chosen button{border:0;border-radius:999px;padding:5px 10px 5px 8px;background:var(--cream);font-family:var(--title);font-weight:600;font-size:.74rem;display:inline-flex;align-items:center;gap:6px}
+.chosen button i{width:10px;height:10px;border-radius:50%;background:var(--cc)}
+.ship{display:flex;align-items:center;gap:10px;font-size:.9rem}
+.ship i{width:9px;height:9px;border-radius:50%;background:#2fa36b;box-shadow:0 0 0 4px rgba(47,163,107,.18)}
+.cta{width:100%;padding:19px;font-size:1rem}
+.cta:disabled{background:#8d8782;cursor:not-allowed}
+.assure{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.assure div{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;font-size:.78rem;font-family:var(--title);font-weight:600}
+.assure svg{width:22px;height:22px;fill:none;stroke:var(--black);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.buy .pay{justify-content:center}
+details{border-top:1px solid var(--line)}
 details:last-of-type{border-bottom:1px solid var(--line)}
-summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:14px 0;font-family:var(--title);font-weight:600}
+summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:16px 0;font-family:var(--title);font-weight:600}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"+";font-size:1.4rem;font-weight:500;transition:transform .25s}
+summary::after{content:"+";font-size:1.4rem;font-weight:400;transition:transform .25s}
 details[open] summary::after{transform:rotate(45deg)}
-details p{margin:0 0 14px;color:var(--ink-soft);max-width:56ch}
-.sticky-buy{position:fixed;left:0;right:0;bottom:0;z-index:25;display:none;align-items:center;gap:12px;background:var(--white);box-shadow:0 -10px 30px -20px rgba(0,0,0,.4);padding:10px var(--gutter-r) calc(10px + env(safe-area-inset-bottom,0px)) var(--gutter-l);transform:translateY(110%);transition:transform .35s}
-.sticky-buy.on{transform:none}
-.sticky-buy img{width:40px}
-.sticky-buy div{flex:1;min-width:0;font-family:var(--title);font-weight:600;font-size:.88rem;line-height:1.2}
-.sticky-buy .btn{padding:12px 18px}
-.related{padding-block:20px 90px}
-.related h2{font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:24px}
+details p{margin:0 0 16px;color:var(--ink-soft);max-width:56ch}
+
+/* sections sous la ligne de flottaison */
+.band{background:var(--c);color:var(--fg);position:relative;overflow:hidden}
+.band::before{content:"";position:absolute;width:60vmax;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.14);right:-20vmax;top:-26vmax}
+.band .wrap{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding-block:100px}
+.band h2{font-size:clamp(2.2rem,5vw,4rem);margin:12px 0 20px}
+.band p{max-width:42ch;margin:0}
+.profile{display:grid;gap:22px}
+.prow{display:grid;grid-template-columns:110px 1fr;align-items:center;gap:16px;font-family:var(--title);font-weight:600;font-size:.9rem}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.scale i{height:8px;border-radius:4px;background:currentColor;opacity:.22;transform-origin:left;transition:opacity .5s}
+.scale i.on{opacity:1}
+.sec{padding-block:96px}
+.sec h2{font-size:clamp(2rem,4.4vw,3.2rem)}
+.sec .intro{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:34px}
+.sec .intro p{margin:0;max-width:44ch;color:var(--ink-soft)}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;counter-reset:st}
+.step{background:var(--white);border-radius:var(--r);padding:28px;display:flex;flex-direction:column;gap:10px;min-height:220px}
+.step .n{font-family:var(--title);font-weight:700;font-size:2.6rem;line-height:1;color:var(--c)}
+.step h3{font-size:1.25rem}
+.step p{margin:0;color:var(--ink-soft)}
+.pairs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.pair{border-radius:var(--r);padding:30px 26px;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;position:relative;overflow:hidden;background:var(--white);box-shadow:inset 0 0 0 1.5px var(--line)}
+.pair::before{content:"";position:absolute;width:150px;aspect-ratio:1;border-radius:50%;background:var(--c);opacity:.18;right:-40px;top:-40px}
+.pair span{font-family:var(--title);font-weight:600;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+.pair h3{font-size:1.5rem}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border-radius:var(--r);overflow:hidden}
+.facts div{background:var(--white);padding:26px 22px;display:flex;flex-direction:column;gap:6px}
+.facts b{font-family:var(--title);font-size:1.15rem}
+.facts span{font-size:.88rem;color:var(--ink-soft)}
+.reviews{display:grid;grid-template-columns:1fr 2fr;gap:40px;align-items:start}
+.rv-sum{background:var(--white);border-radius:var(--r);padding:28px;display:grid;gap:12px;justify-items:start}
+.rv-sum .stars svg{width:22px;height:22px}
+.rv-empty{border-radius:var(--r);border:1.5px dashed rgba(17,17,17,.2);padding:40px;display:grid;place-items:center;text-align:center;gap:10px;color:var(--ink-soft);min-height:220px}
+.gift{background:linear-gradient(150deg,#FF7900 0%,#F5507A 60%,#EF2970 100%);color:var(--white);border-radius:var(--r);overflow:hidden;display:grid;grid-template-columns:1.2fr 1fr;align-items:center;gap:30px;padding:46px clamp(24px,5vw,64px);position:relative}
+.gift::after{content:"";position:absolute;width:320px;aspect-ratio:1;border-radius:50%;background:var(--powder);opacity:.5;right:-90px;bottom:-160px}
+.gift h2{font-size:clamp(2rem,4vw,3rem);margin:10px 0 14px}
+.gift p{margin:0 0 22px;max-width:40ch}
+.gift .jars{display:flex;justify-content:center;align-items:flex-end;position:relative;z-index:1}
+.gift .jars img{width:30%;margin:0 -3%;filter:drop-shadow(0 20px 20px rgba(80,0,20,.3))}
+.gift .jars img:nth-child(3){width:36%;position:relative;z-index:2}
+.faq{max-width:820px}
 .related .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-@media (max-width:900px){
-  .pdp{grid-template-columns:1fr;gap:26px}
-  .gallery{position:static}
-  .sticky-buy{display:flex}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* barre d'achat collante */
+.sticky-buy{position:fixed;left:0;right:0;bottom:0;z-index:25;display:flex;align-items:center;gap:12px;background:var(--white);box-shadow:0 -10px 30px -20px rgba(0,0,0,.4);padding:10px var(--gutter-r) calc(10px + env(safe-area-inset-bottom,0px)) var(--gutter-l);transform:translateY(110%);transition:transform .35s}
+.sticky-buy.on{transform:none}
+.sticky-buy .th{width:44px;height:50px;border-radius:10px;background:var(--c);display:grid;place-items:end center}
+.sticky-buy .th img{width:70%}
+.sticky-buy div.t{flex:1;min-width:0;font-family:var(--title);font-weight:600;font-size:.9rem;line-height:1.25}
+.sticky-buy div.t span{font-weight:500;color:var(--ink-soft)}
+.sticky-buy .btn{padding:13px 22px}
+@media (min-width:1000px){.sticky-buy{left:auto;right:24px;bottom:24px;width:420px;border-radius:999px;padding:8px 8px 8px 10px;box-shadow:0 20px 40px -18px rgba(0,0,0,.45)}.sticky-buy .th{border-radius:50%;width:44px;height:44px}}
+
+@media (max-width:960px){
+  .pdp{grid-template-columns:1fr;gap:22px}
+  .gallery{position:static;grid-template-columns:1fr;margin-inline:calc(-1 * var(--gutter-l)) calc(-1 * var(--gutter-r))}
+  .slides{border-radius:0}
+  .slide{border-radius:0;aspect-ratio:1/1.08}
+  .thumbs{display:none}
+  .pager{display:flex}
+  .band .wrap{grid-template-columns:1fr;gap:34px;padding-block:72px}
+  .steps,.pairs{grid-template-columns:1fr}
+  .step{min-height:0}
+  .pair{min-height:150px}
+  .facts{grid-template-columns:1fr 1fr}
+  .reviews{grid-template-columns:1fr;gap:20px}
+  .gift{grid-template-columns:1fr}
   .related .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sec{padding-block:70px}
 }
+@media (max-width:520px){.swatches{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.offer{grid-template-columns:20px 54px 1fr auto;gap:10px;padding:12px}.offer .vis{height:56px}}
 </style>
 </head>
 <body data-page="product">
@@ -89,14 +196,14 @@ details p{margin:0 0 14px;color:var(--ink-soft);max-width:56ch}
   </div>
 </header>
 
-<main class="wrap" id="main"></main>
+<main id="main"></main>
 
 <footer>
   <div class="wrap">
     <div class="cols">
       <div><a class="logo" href="index.html">KŌMI</a><p style="margin:0;color:var(--ink-soft);max-width:30ch">Miels premium accessibles. Paiement sécurisé, livraison en France.</p></div>
       <div><h4>Boutique</h4><ul><li><a href="index.html#boutique">Tous les miels</a></li><li><a href="index.html#coffrets">Coffrets &amp; packs</a></li><li><a href="index.html#recettes">Recettes</a></li></ul></div>
-      <div><h4>Aide</h4><ul><li><a href="#">FAQ</a></li><li><a href="#">Livraison &amp; retours</a></li><li><a href="#">Contact</a></li></ul></div>
+      <div><h4>Aide</h4><ul><li><a href="#faq">FAQ</a></li><li><a href="#">Livraison &amp; retours</a></li><li><a href="#">Contact</a></li></ul></div>
       <div><h4>Informations</h4><ul><li><a href="#">CGV</a></li><li><a href="#">Mentions légales</a></li><li><a href="#">Confidentialité</a></li><li><a href="#">Cookies</a></li></ul></div>
     </div>
     <div class="fine"><span>© 2026 KŌMI · Instagram · TikTok</span><span class="pay"><span>CB</span><span>Visa</span><span>Mastercard</span><span>Apple Pay</span><span>Google Pay</span></span><span>Maquette réalisée par Goual</span></div>
@@ -105,67 +212,241 @@ details p{margin:0 0 14px;color:var(--ink-soft);max-width:56ch}
 
 <script src="assets/komi.js"></script>
 <script>
-const id = new URLSearchParams(location.search).get("p");
-const P = byId(id) || PRODUCTS[0];
-document.title = `${P.name} — KŌMI`;
-document.body.style.setProperty("--c", P.color);
-const fg = textOn(P.color);
-$("#main").innerHTML = `
-  <nav class="crumbs" aria-label="Fil d'Ariane"><a href="index.html">Accueil</a> / <a href="index.html#boutique">Boutique</a> / ${P.name}</nav>
-  <div class="pdp">
-    <div class="gallery">
-      <div class="slides" id="slides">
-        <div class="slide c1"><img src="${jarSrc(P)}" alt="${P.name}, pot de 250 g"></div>
-        <div class="slide c2"><div class="zoom" style="background-image:url(${jarSrc(P)})" role="img" aria-label="Détail de l'étiquette ${P.name}"></div></div>
-        <div class="slide c3"><img src="${jarSrc(P)}" alt="" loading="lazy"></div>
+/* Offre coffret : à confirmer par le client (ici, exemple à −10 %) */
+const TRIO = { size:3, discount:.10, name:"Coffret Trio" };
+const STAR = '<svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/></svg>';
+const ICON = {
+  lock:'<svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>',
+  truck:'<svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>',
+  gift:'<svg viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M12 9v11M4 13h16M12 9c-2-4-6-4-6-1s6 1 6 1Zm0 0c2-4 6-4 6-1s-6 1-6 1Z"/></svg>'
+};
+const trioRound = b => Math.round(b*(1-TRIO.discount)) - 0.10; // prix psychologique en ,90
+const fmtDate = d => d.toLocaleDateString("fr-FR",{ weekday:"short", day:"numeric", month:"short" });
+function addBusinessDays(n){ const d = new Date(); while(n>0){ d.setDate(d.getDate()+1); if(d.getDay()%6) n--; } return d; }
+const others = P => PRODUCTS.filter(x=>x.id!==P.id);
+
+let P, offer = "one", picks = [];
+
+function render(){
+  document.title = `${P.name} — KŌMI`;
+  document.body.style.setProperty("--c", P.color);
+  document.body.style.setProperty("--fg", textOn(P.color));
+  const trioFull = PRODUCTS.find(x=>x.id!==P.id && x.fam===P.fam);
+  const trioJars = [trioFull, P, others(P).find(x=>x.fam!==P.fam)];
+  const unit = P.price, trioBase = unit*3, trioPrice = trioRound(trioBase);
+  const d1 = addBusinessDays(2), d2 = addBusinessDays(4);
+  const lvl = (n) => Array.from({length:5},(_,i)=>`<i class="${i<n?"on":""}"></i>`).join("");
+
+  $("#main").innerHTML = `
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Fil d'Ariane"><a href="index.html">Accueil</a> / <a href="index.html#boutique">Boutique</a> / ${P.name}</nav>
+    <div class="pdp">
+      <div class="gallery">
+        <div class="thumbs" id="thumbs">
+          <button class="on" style="background:var(--c)" aria-label="Photo 1"><img src="${jarSrc(P)}" alt=""></button>
+          <button style="background:var(--white)" aria-label="Photo 2"><img src="${jarSrc(P)}" alt=""></button>
+          <button style="background:linear-gradient(150deg,#FF7900,#EF2970)" aria-label="Photo 3"><img src="${jarSrc(P)}" alt=""></button>
+          <button style="background:var(--white)" aria-label="Photo 4"><img src="${jarSrc(trioJars[1])}" alt=""></button>
+        </div>
+        <div>
+          <div class="slides" id="slides">
+            <div class="slide s-color"><img src="${jarSrc(P)}" alt="${P.name}, pot de 250 g"></div>
+            <div class="slide s-zoom"><div class="zoom" style="background-image:url(${jarSrc(P)})" role="img" aria-label="Détail de l'étiquette ${P.name}"></div></div>
+            <div class="slide s-brand"><img src="${jarSrc(P)}" alt="" loading="lazy"></div>
+            <div class="slide s-trio"><p class="eyebrow lbl">En coffret trio</p><div class="row3">${trioJars.map(j=>`<img src="${jarSrc(j)}" alt="${j.name}" loading="lazy">`).join("")}</div></div>
+          </div>
+          <div class="pager" id="pager"><i class="on"></i><i></i><i></i><i></i></div>
+        </div>
       </div>
-      <div class="thumbs" id="thumbs">
-        <button class="t1 on" aria-label="Photo 1"><img src="${jarSrc(P)}" alt=""></button>
-        <button class="t2" aria-label="Photo 2"><img src="${jarSrc(P)}" alt=""></button>
-        <button class="t3" aria-label="Photo 3"><img src="${jarSrc(P)}" alt=""></button>
-      </div>
-    </div>
-    <div class="buy">
-      <span class="fam"><i></i>${FAM[P.fam]}</span>
-      <h1>${P.name}</h1>
-      <p class="ing">${P.ing}</p>
-      <div class="pp"><b>${euro(P.price)}</b><small>Taxes incluses · 250 g</small></div>
-      <p class="desc">${P.text}</p>
-      <div><p class="eyebrow" style="margin-bottom:10px">Format</p>
-        <div class="formats"><button aria-pressed="true">Pot 250 g</button><button disabled title="Bientôt disponible">Pot 500 g</button></div></div>
-      <div class="actions">
-        <div class="qty"><button id="minus" aria-label="Diminuer la quantité">−</button><span id="qn">1</span><button id="plus" aria-label="Augmenter la quantité">+</button></div>
-        <button class="btn dark" id="addBtn" data-add="${P.id}" data-qty="1">Ajouter au panier</button>
-        <a class="btn orange" id="buyNow" href="paiement.html">Acheter maintenant</a>
-      </div>
-      <div class="perks">
-        <div><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Paiement sécurisé</div>
-        <div><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>Livraison en France</div>
-        <div><svg viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M12 9v11M4 13h16M12 9c-2-4-6-4-6-1s6 1 6 1Zm0 0c2-4 6-4 6-1s-6 1-6 1Z"/></svg>Idée cadeau</div>
-      </div>
-      <div>
-        <details open><summary>Description</summary><p>${P.text} Un pot en verre de 250 g, fermé d'un couvercle doré satiné et d'une bande de couleur ${P.name.replace(/^Miel /,"").toLowerCase()}.</p></details>
-        <details><summary>Composition</summary><p>${P.ing.replace(" · ", " — origine : ")}. La liste complète des ingrédients et les mentions réglementaires seront ajoutées après validation.</p></details>
-        <details><summary>Dégustation &amp; conservation</summary><p>À déguster nature, sur une tartine, dans un yaourt ou une boisson chaude (pas bouillante). Conserver à température ambiante, à l'abri de la lumière. Le miel peut cristalliser naturellement.</p></details>
-        <details><summary>Livraison &amp; retours</summary><p>Expédition en France. Les délais et tarifs seront précisés à l'étape du paiement.</p></details>
+
+      <div class="buy">
+        <div class="top">
+          <span class="fam"><i></i>${FAM[P.fam]}</span>
+          <h1>${P.name}</h1>
+          <p class="tagline">${P.tagline} · ${P.ing}</p>
+          <div class="rating"><span class="stars">${STAR.repeat(5)}</span><a href="#avis">Soyez le premier à donner votre avis</a></div>
+        </div>
+        <div class="tags">${P.tags.map(t=>`<span>${t}</span>`).join("")}</div>
+
+        <div>
+          <div class="label">Miel <span>${P.name}</span></div>
+          <div class="swatches" role="radiogroup" aria-label="Choisir un miel">
+            ${PRODUCTS.map(x=>`<button class="sw" role="radio" aria-checked="${x.id===P.id}" style="--sc:${x.color}" title="${x.name}" aria-label="${x.name}" data-p="${x.id}"></button>`).join("")}
+          </div>
+        </div>
+
+        <div>
+          <div class="label">Format</div>
+          <div class="offers" role="radiogroup" aria-label="Format">
+            <label class="offer ${offer==="one"?"on":""}" data-offer="one"><input type="radio" name="offer" ${offer==="one"?"checked":""}><span class="dot"></span>
+              <span class="vis"><img src="${jarSrc(P)}" alt=""></span>
+              <span><b>1 pot · 250 g</b><small>${P.name}</small></span>
+              <span class="pr">${euro(unit)}</span></label>
+            <label class="offer ${offer==="trio"?"on":""}" data-offer="trio"><input type="radio" name="offer" ${offer==="trio"?"checked":""}><span class="dot"></span><span class="badge">Le plus offert</span>
+              <span class="vis trio">${trioJars.map(j=>`<img src="${jarSrc(j)}" alt="">`).join("")}</span>
+              <span><b>Coffret Trio · 3 × 250 g</b><small>3 miels au choix, boîte KŌMI</small></span>
+              <span class="pr">${euro(trioPrice)}<s>${euro(trioBase)}</s></span></label>
+          </div>
+        </div>
+
+        <div class="builder" id="builder" ${offer==="trio"?"":"hidden"}>
+          <div class="bh"><span>Composez votre trio</span><span id="cnt">0/3</span></div>
+          <div class="meter"><i id="meter"></i></div>
+          <div class="picks" id="picks">${PRODUCTS.map(x=>`<button class="pick" data-pick="${x.id}" style="--pc:${x.color};--pf:${textOn(x.color)}" aria-label="Ajouter ${x.name} au trio"><img src="${jarSrc(x)}" alt=""><span>${x.name.replace(/^Miel (d'|de )/,"")}</span><b></b></button>`).join("")}</div>
+          <div class="chosen" id="chosen"></div>
+        </div>
+
+        <div class="ship"><i></i><span>En stock · Livraison estimée entre le <b>${fmtDate(d1)}</b> et le <b>${fmtDate(d2)}</b></span></div>
+        <button class="btn dark cta" id="cta"></button>
+        <div class="assure"><div>${ICON.lock}Paiement sécurisé</div><div>${ICON.truck}Expédition soignée</div><div>${ICON.gift}Coffret cadeau</div></div>
+        <div class="pay"><span>CB</span><span>Visa</span><span>Mastercard</span><span>Apple Pay</span><span>Google Pay</span><span>PayPal</span></div>
+
+        <div>
+          <details open><summary>Description</summary><p>${P.text} Présenté en pot de verre de 250 g, fermé d'un couvercle doré satiné et d'une bande à sa couleur.</p></details>
+          <details><summary>Dégustation</summary><p>À la cuillère, sur une tartine, dans un yaourt ou une boisson chaude mais pas bouillante. Accords conseillés : ${P.pairings.join(", ").toLowerCase()}.</p></details>
+          <details><summary>Composition &amp; origine</summary><p>${P.ing.replace(" · "," · origine ")}. La liste complète des ingrédients et les mentions réglementaires seront ajoutées après validation.</p></details>
+          <details><summary>Livraison &amp; retours</summary><p>Expédition en France, en emballage protégé. Les tarifs et délais exacts s'affichent à l'étape du paiement.</p></details>
+        </div>
       </div>
     </div>
   </div>
-  <section class="related"><h2>Vous aimerez aussi</h2><div class="grid">${PRODUCTS.filter(x=>x.id!==P.id).sort((a,b)=>(a.fam===P.fam?-1:1)-(b.fam===P.fam?-1:1)).slice(0,4).map(cardHTML).join("")}</div></section>
-  <div class="sticky-buy" id="stickyBuy"><img src="${jarSrc(P)}" alt=""><div>${P.name}<br><span style="font-weight:500;color:var(--ink-soft)">${euro(P.price)}</span></div><button class="btn dark" data-add="${P.id}">Ajouter</button></div>`;
 
-/* galerie : défilement + vignettes */
-const slides = $("#slides"), thumbs = $$("#thumbs button");
-thumbs.forEach((b,i)=>b.addEventListener("click", ()=>slides.scrollTo({ left: slides.clientWidth*i, behavior: reduceMotion ? "auto" : "smooth" })));
-slides.addEventListener("scroll", ()=>{ const i = Math.round(slides.scrollLeft / slides.clientWidth); thumbs.forEach((b,k)=>b.classList.toggle("on", k===i)); }, { passive:true });
-/* quantité */
-let q = 1; const qn = $("#qn"), addBtn = $("#addBtn");
-function setQ(v){ q = Math.max(1, Math.min(20, v)); qn.textContent = q; addBtn.dataset.qty = q; }
-$("#minus").addEventListener("click", ()=>setQ(q-1)); $("#plus").addEventListener("click", ()=>setQ(q+1));
-/* acheter maintenant : ajoute puis part au paiement (comme le bouton de paiement dynamique Shopify) */
-$("#buyNow").addEventListener("click", e=>{ e.preventDefault(); Cart.add(P.id, q); location.href = "paiement.html"; });
-/* barre d'achat collante sur mobile quand le bouton principal sort de l'écran */
-new IntersectionObserver(([en])=>$("#stickyBuy").classList.toggle("on", !en.isIntersecting && en.boundingClientRect.top < 0)).observe(addBtn);
+  <section class="band">
+    <div class="wrap">
+      <div class="reveal"><p class="eyebrow">Notes de dégustation</p><h2>${P.tagline}.</h2><p>${P.text}</p></div>
+      <div class="profile reveal">
+        <div class="prow"><span>Douceur</span><div class="scale">${lvl(P.profile.douceur)}</div></div>
+        <div class="prow"><span>Intensité</span><div class="scale">${lvl(P.profile.intensite)}</div></div>
+        <div class="prow"><span>Notes florales</span><div class="scale">${lvl(P.profile.floral)}</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="intro reveal"><h2>Le rituel KŌMI</h2><p>Trois gestes pour profiter de chaque cuillère.</p></div>
+      <div class="steps">
+        <article class="step reveal"><span class="n">01</span><h3>Ouvrir</h3><p>Dévissez le couvercle doré et laissez le parfum du miel se libérer.</p></article>
+        <article class="step reveal"><span class="n">02</span><h3>Goûter</h3><p>Une cuillère nature d'abord, pour découvrir sa texture et ses arômes.</p></article>
+        <article class="step reveal"><span class="n">03</span><h3>Associer</h3><p>Puis en accord : ${P.pairings[0].toLowerCase()}, ${P.pairings[1].toLowerCase()} ou ${P.pairings[2].toLowerCase()}.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="intro reveal"><h2>Nos accords préférés</h2></div>
+      <div class="pairs">${P.pairings.map((a,i)=>`<article class="pair reveal"><span>Accord 0${i+1}</span><h3>${a}</h3></article>`).join("")}</div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="facts reveal">
+        <div><b>${P.ing.split(" · ")[1] || "Méditerranée"}</b><span>Origine</span></div>
+        <div><b>250 g</b><span>Pot en verre</span></div>
+        <div><b>Doré satiné</b><span>Couvercle</span></div>
+        <div><b>À l'abri de la lumière</b><span>Conservation</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="avis" style="padding-top:0">
+    <div class="wrap">
+      <div class="intro reveal"><h2>Avis clients</h2></div>
+      <div class="reviews">
+        <div class="rv-sum reveal"><span class="stars">${STAR.repeat(5)}</span><b style="font-family:var(--title)">Aucun avis pour le moment</b><button class="btn dark" type="button">Écrire un avis</button></div>
+        <div class="rv-empty reveal"><b style="font-family:var(--title);color:var(--black)">Les avis vérifiés apparaîtront ici</b><span>Après chaque commande, le client reçoit une invitation à noter son miel.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="gift reveal">
+        <div style="position:relative;z-index:1"><p class="eyebrow">Coffrets</p><h2>Offrez trois couleurs</h2><p>Composez un trio, il part dans sa boîte KŌMI avec une carte écrite pour la personne qui le reçoit.</p><button class="btn light" id="toTrio" type="button">Composer un trio</button></div>
+        <div class="jars">${[PRODUCTS[0],PRODUCTS[5],P,PRODUCTS[2],PRODUCTS[7]].filter((v,i,a)=>a.indexOf(v)===i).slice(0,5).map(j=>`<img src="${jarSrc(j)}" alt="" loading="lazy">`).join("")}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="faq" style="padding-top:0">
+    <div class="wrap faq">
+      <div class="intro reveal"><h2>Questions fréquentes</h2></div>
+      <details><summary>Mon miel a cristallisé, est-ce normal ?</summary><p>Oui. La cristallisation est naturelle et ne change pas la qualité du miel. Pour le rendre plus fluide, placez le pot fermé quelques minutes au bain-marie tiède.</p></details>
+      <details><summary>Comment conserver le miel ?</summary><p>À température ambiante, pot bien fermé, à l'abri de la lumière et de l'humidité. Inutile de le mettre au réfrigérateur.</p></details>
+      <details><summary>Peut-on le mettre dans une boisson chaude ?</summary><p>Oui, ajoutez-le quand la boisson n'est plus bouillante, pour garder tous ses arômes.</p></details>
+      <details><summary>Le miel convient-il aux jeunes enfants ?</summary><p>Le miel est déconseillé aux enfants de moins d'un an.</p></details>
+      <details><summary>Puis-je ajouter un message pour un cadeau ?</summary><p>Oui, chaque coffret peut être accompagné d'une carte avec votre message, à indiquer dans le panier.</p></details>
+    </div>
+  </section>
+
+  <section class="sec related" style="padding-top:0">
+    <div class="wrap"><div class="intro reveal"><h2>Vous aimerez aussi</h2></div>
+    <div class="grid">${others(P).sort((a,b)=>(a.fam===P.fam?-1:1)-(b.fam===P.fam?-1:1)).slice(0,4).map(cardHTML).join("")}</div></div>
+  </section>
+
+  <div class="sticky-buy" id="stickyBuy"><span class="th"><img src="${jarSrc(P)}" alt=""></span><div class="t">${P.name}<br><span id="sbPrice">${euro(unit)}</span></div><button class="btn dark" id="sbBtn" type="button">Ajouter</button></div>`;
+
+  wire(trioPrice);
+}
+
+function wire(trioPrice){
+  // galerie
+  const slides = $("#slides"), thumbs = $$("#thumbs button"), dots = $$("#pager i");
+  thumbs.forEach((b,i)=>b.addEventListener("click", ()=>slides.scrollTo({ left: slides.clientWidth*i, behavior: reduceMotion ? "auto" : "smooth" })));
+  slides.addEventListener("scroll", ()=>{ const i = Math.round(slides.scrollLeft / slides.clientWidth); thumbs.forEach((b,k)=>b.classList.toggle("on", k===i)); dots.forEach((d,k)=>d.classList.toggle("on", k===i)); }, { passive:true });
+  // changer de miel sans recharger la page
+  $$(".sw").forEach(b=>b.addEventListener("click", ()=>{ go(b.dataset.p); }));
+  // formats
+  $$(".offer").forEach(o=>o.addEventListener("click", e=>{ e.preventDefault(); setOffer(o.dataset.offer); }));
+  $("#toTrio").addEventListener("click", ()=>{ setOffer("trio"); $(".buy").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" }); });
+  // composer le trio
+  $$(".pick").forEach(b=>b.addEventListener("click", ()=>{ if(picks.length < TRIO.size){ picks.push(b.dataset.pick); updateTrio(); } }));
+  $("#chosen").addEventListener("click", e=>{ const b = e.target.closest("[data-i]"); if(b){ picks.splice(+b.dataset.i,1); updateTrio(); } });
+  // ajout au panier
+  const add = ()=>{
+    if(offer==="one"){ Cart.add(P.id, 1); openDrawer(); return; }
+    if(picks.length < TRIO.size){ setOffer("trio"); $("#builder").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block:"center" }); return; }
+    const base = picks.reduce((s,id)=>s+byId(id).price,0);
+    Cart.addBundle(TRIO.name, picks.slice(), trioRound(base));
+    picks = [P.id]; updateTrio(); openDrawer();
+  };
+  $("#cta").addEventListener("click", add); $("#sbBtn").addEventListener("click", add);
+  new IntersectionObserver(([en])=>$("#stickyBuy").classList.toggle("on", !en.isIntersecting && en.boundingClientRect.top < 0)).observe($("#cta"));
+  // apparitions douces
+  const io = new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } }), { rootMargin:"0px 0px -8% 0px" });
+  $$(".reveal").forEach(el=>{ if(el.getBoundingClientRect().top < innerHeight) el.classList.add("in"); else io.observe(el); });
+  updateTrio();
+}
+
+function setOffer(o){
+  offer = o;
+  $$(".offer").forEach(x=>x.classList.toggle("on", x.dataset.offer===o));
+  $("#builder").hidden = o!=="trio";
+  updateTrio();
+}
+function updateTrio(){
+  const n = picks.length, full = n >= TRIO.size;
+  $("#cnt").textContent = `${n}/${TRIO.size}`;
+  $("#meter").style.width = (n/TRIO.size*100) + "%";
+  $$(".pick").forEach(b=>{ const c = picks.filter(x=>x===b.dataset.pick).length; b.classList.toggle("has", c>0); b.querySelector("b").textContent = c; b.disabled = full; });
+  $("#chosen").innerHTML = picks.map((id,i)=>`<button type="button" data-i="${i}" style="--cc:${byId(id).color}" aria-label="Retirer ${byId(id).name}"><i></i>${byId(id).name.replace(/^Miel (d'|de )/,"")} ✕</button>`).join("");
+  const cta = $("#cta"), sb = $("#sbPrice");
+  if(offer==="one"){ cta.textContent = `Ajouter au panier · ${euro(P.price)}`; cta.disabled = false; sb.textContent = euro(P.price); }
+  else{
+    const base = picks.reduce((s,id)=>s+byId(id).price,0), price = trioRound(base);
+    cta.textContent = full ? `Ajouter le trio · ${euro(price)}` : `Choisissez encore ${TRIO.size-n} miel${TRIO.size-n>1?"s":""}`;
+    cta.disabled = !full; sb.textContent = full ? euro(price) : "Trio à composer";
+  }
+}
+function go(id, push=true){
+  P = byId(id) || PRODUCTS[0];
+  if(!picks.length || offer==="one") picks = [P.id];
+  if(push) history.replaceState(null, "", `?p=${P.id}`);
+  const y = scrollY; render(); scrollTo(0, y);
+}
+go(new URLSearchParams(location.search).get("p") || "oranger", false);
 </script>
 </body>
 </html>
