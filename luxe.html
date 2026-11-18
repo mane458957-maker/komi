@@ -8,7 +8,7 @@
 <meta name="description" content="KŌMI, des miels premium accessibles. Dix références, une couleur par miel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Lato:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/komi.css?v=1794986357">
+<link rel="stylesheet" href="assets/komi.css?v=1794986432">
 <style>
 /* Version « luxe » : beaucoup de blanc et de crème, la couleur n'arrive que par touches, typographie fine. */
 :root{--line:rgba(17,17,17,.1);--soft:#F3EEE6}
@@ -337,7 +337,7 @@ section.s{padding-block:clamp(64px,8vw,110px)}
   </div>
 </footer>
 
-<script src="assets/komi.js?v=1794986357"></script>
+<script src="assets/komi.js?v=1794986432"></script>
 <script>
 const P = id => byId(id);
 const short = p => p.name.replace(/^Miel (d'|de )/,"");
@@ -422,7 +422,7 @@ $("#nf").addEventListener("submit", e=>{ e.preventDefault(); const v = $("#nm").
 let i=0,t;dots.innerHTML=imgs.map((_,k)=>`<button aria-label="Photo ${k+1}" aria-current="${k===0}"></button>`).join("");
 const bs=[...dots.children];
 const show=k=>{i=(k+imgs.length)%imgs.length;imgs.forEach((im,n)=>im.classList.toggle("on",n===i));bs.forEach((b,n)=>b.setAttribute("aria-current",String(n===i)));};
-const play=()=>{clearInterval(t);if(!matchMedia("(prefers-reduced-motion:reduce)").matches)t=setInterval(()=>show(i+1),5000);};
+const play=()=>{clearInterval(t);if(!matchMedia("(prefers-reduced-motion:reduce)").matches)t=setInterval(()=>show(i+1),3000);};
 bs.forEach((b,n)=>b.addEventListener("click",()=>{show(n);play();}));
 let sx=null;const st=document.getElementById("hero");
 st.addEventListener("touchstart",e=>{sx=e.touches[0].clientX},{passive:true});
