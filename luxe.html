@@ -6,7 +6,7 @@
 <title>KŌMI</title>
 <meta name="description" content="KŌMI, des miels premium accessibles. Dix références, une couleur par miel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Lato:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Lato:wght@400;700&display=swap">
 <link rel="stylesheet" href="assets/komi.css">
 <style>
 /* Version « luxe » : beaucoup de blanc et de crème, la couleur n'arrive que par touches, typographie fine. */
@@ -19,39 +19,38 @@ body{background:#FFFFFF}
 .more{font-family:var(--title);font-weight:600;font-size:.86rem;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px}
 section.s{padding-block:clamp(70px,9vw,120px)}
 
-/* ---------- ouverture : carrousel éditorial ---------- */
-.hero{position:relative;background:var(--tint,#FDF3E7);transition:background-color 1s ease;overflow:hidden}
-.hero .wrap{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;min-height:min(78vh,760px);padding-block:40px 70px}
-.hcopy{position:relative;min-height:19em}
-.hs{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:22px;opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .9s cubic-bezier(.2,.7,.2,1);pointer-events:none}
-.hs.on{opacity:1;transform:none;pointer-events:auto;transition-delay:.15s}
-.hs h1,.hs h2{font-size:clamp(2.6rem,5.6vw,5.2rem)}
-.hs p.sub{margin:0;max-width:38ch;font-size:1.06rem;color:var(--ink-soft)}
-.hs .row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-.hvis{position:relative;aspect-ratio:1;max-height:640px;width:100%;justify-self:center}
-.disc{position:absolute;inset:6%;border-radius:50%;background:var(--accent,#F59A23);opacity:.95;transition:background-color 1s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
-.disc::after{content:"";position:absolute;inset:-5%;border-radius:50%;border:1px solid var(--accent,#F59A23);opacity:.35;transition:border-color 1s}
-.hv{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;opacity:0;transform:translateY(30px) scale(.96);transition:opacity .8s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
-.hv.on{opacity:1;transform:none}
-.hv img{width:62%;filter:drop-shadow(0 40px 40px rgba(60,30,0,.25));margin-bottom:4%}
-.hv.trio img{width:40%;margin:0 -5% 6%}
-.hv.trio img:nth-child(2){width:46%;position:relative;z-index:1}
-.hnav{position:absolute;left:var(--gutter-l);bottom:26px;display:flex;align-items:center;gap:18px;z-index:2}
-.hnav button.d{width:34px;height:3px;border:0;padding:0;border-radius:2px;background:rgba(17,17,17,.15);position:relative;overflow:hidden}
-.hnav button.d i{position:absolute;inset:0;background:var(--black);transform:scaleX(0);transform-origin:left}
-.hnav button.d.on i{animation:prog var(--dur,6s) linear forwards}
-.hnav button.d.done i{transform:scaleX(1)}
-@keyframes prog{to{transform:scaleX(1)}}
-.hnav .arrows{display:flex;gap:6px;margin-left:8px}
-.hnav .arrows button{width:38px;height:38px;border-radius:50%;border:0;background:#fff;box-shadow:inset 0 0 0 1px var(--line);display:grid;place-items:center}
-.hnav svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-
-/* ---------- bandeau défilant ---------- */
-.marq{border-block:1px solid var(--line);overflow:hidden;white-space:nowrap;padding-block:16px;background:#fff}
-.marq div{display:inline-flex;gap:46px;animation:marq 40s linear infinite;padding-left:46px}
-.marq span{font-family:var(--title);font-weight:500;font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;display:inline-flex;align-items:center;gap:46px}
-.marq span::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--honey)}
+/* ---------- ouverture (comme Feel) : texte centré, photo en bas, bandeau qui défile par-dessus ---------- */
+.hero{position:relative;overflow:hidden;background:#FBE3EA;text-align:center;min-height:min(100svh,980px);display:flex;flex-direction:column;align-items:center}
+.hbg{position:absolute;inset:0;overflow:hidden;filter:blur(60px) saturate(1.05);transform:scale(1.1)}
+.hbg i{position:absolute;border-radius:50%;opacity:.85;will-change:transform}
+.hbg i:nth-child(1){width:60vmax;height:60vmax;left:-18vmax;top:-22vmax;background:#F6A6BD;animation:fa 14s ease-in-out infinite alternate}
+.hbg i:nth-child(2){width:50vmax;height:50vmax;right:-16vmax;top:-10vmax;background:#FFC08A;animation:fb 17s ease-in-out infinite alternate}
+.hbg i:nth-child(3){width:46vmax;height:46vmax;left:20vw;bottom:-26vmax;background:#FF9F6B;opacity:.6;animation:fc 12s ease-in-out infinite alternate}
+.hbg i:nth-child(4){width:34vmax;height:34vmax;right:6vw;bottom:-6vmax;background:#EF2970;opacity:.35;animation:fd 19s ease-in-out infinite alternate}
+@keyframes fa{to{transform:translate(14vmax,10vmax) scale(1.15)}}
+@keyframes fb{to{transform:translate(-12vmax,14vmax) scale(.9)}}
+@keyframes fc{to{transform:translate(-10vmax,-12vmax) scale(1.2)}}
+@keyframes fd{to{transform:translate(-16vmax,-8vmax) scale(1.3)}}
+.htext{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:20px;padding:clamp(28px,5vh,56px) var(--gutter-r) 0 var(--gutter-l)}
+.pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:7px 16px;font-family:var(--title);font-weight:500;font-size:.86rem}
+.pill b{color:var(--fuchsia);font-weight:700}
+.hero h1{font-family:var(--title);font-weight:400;font-size:clamp(2.3rem,5.4vw,4.6rem);line-height:1.08;letter-spacing:-.02em;margin:0}
+.hero h1 em{display:block;font-weight:300;font-style:italic}
+.hero .btn{padding:17px 40px;font-size:1rem;border-radius:12px;font-weight:500}
+.hph{position:relative;z-index:1;margin-top:auto;line-height:0;max-width:96vw}
+.hph img{height:min(calc(100svh - 330px),680px);min-height:320px;width:auto;max-width:100%;object-fit:contain;display:block;animation:rise 1.4s cubic-bezier(.2,.7,.2,1) both .2s}
+@keyframes rise{from{opacity:0;transform:translateY(40px)}}
+.htext>*{animation:rise 1s cubic-bezier(.2,.7,.2,1) both}
+.htext>*:nth-child(2){animation-delay:.08s}.htext>*:nth-child(3){animation-delay:.16s}
+.marq{position:absolute;left:0;right:0;bottom:0;z-index:3;overflow:hidden;white-space:nowrap;padding-block:16px;background:rgba(255,255,255,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.marq div{display:inline-flex;align-items:center;gap:64px;animation:marq 36s linear infinite;padding-left:64px}
+.marq span{font-family:var(--title);color:var(--black);font-size:clamp(1.1rem,2.2vw,1.7rem);white-space:nowrap}
+.marq .m1{font-weight:700;letter-spacing:-.04em}
+.marq .m2{font-weight:300;font-style:italic}
+.marq .m3{font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:clamp(.9rem,1.6vw,1.2rem)}
+.marq .m4{font-weight:400;letter-spacing:-.01em}
 @keyframes marq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.hbg i{animation:none}}
 
 /* ---------- meilleures ventes ---------- */
 .shead{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:28px}
@@ -127,11 +126,9 @@ footer{background:#fff;border-top:1px solid var(--line)}
 .rv.in{opacity:1;transform:none}
 
 @media (max-width:900px){
-  .hero .wrap{grid-template-columns:1fr;gap:0;min-height:0;padding-block:16px 80px}
-  .hvis{order:-1;max-width:420px;width:88%}
-  .hcopy{min-height:17em;text-align:center}
-  .hs{align-items:center}
-  .hnav{left:50%;transform:translateX(-50%)}
+  .hero{min-height:0}
+  .hph{width:118vw;max-width:none;margin-top:28px}
+  .hph img{width:100%;height:auto;min-height:0}
   .prow{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
   .split{grid-template-columns:1fr}
   .goals{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:calc(-1 * var(--gutter-l)) calc(-1 * var(--gutter-r));padding-inline:var(--gutter-l) var(--gutter-r)}
@@ -164,15 +161,16 @@ footer{background:#fff;border-top:1px solid var(--line)}
 </header>
 
 <main>
-<section class="hero" id="hero" aria-roledescription="carrousel" aria-label="À la une">
-  <div class="wrap">
-    <div class="hcopy" id="hcopy"></div>
-    <div class="hvis" id="hvis"><div class="disc"></div></div>
+<section class="hero" id="hero" aria-label="KŌMI">
+  <div class="hbg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="htext">
+    <span class="pill">Paiement sécurisé · Livraison en <b>France</b></span>
+    <h1>Un miel pour chaque instant <em>de votre journée</em></h1>
+    <a class="btn dark" href="#boutique">Découvrir la collection</a>
   </div>
-  <div class="hnav" id="hnav"></div>
+  <div class="hph"><img src="img/hero-relaxation.webp" alt="Une femme souriante, les mains posées sur un pot de miel KŌMI Relaxation et sa boîte" fetchpriority="high"></div>
+  <div class="marq" aria-hidden="true"><div id="marq"></div></div>
 </section>
-
-<div class="marq" aria-hidden="true"><div id="marq"></div></div>
 
 <section class="s" id="boutique">
   <div class="wrap">
@@ -259,37 +257,10 @@ footer{background:#fff;border-top:1px solid var(--line)}
 const P = id => byId(id);
 const mix = (hex, pct) => `color-mix(in srgb, ${hex} ${pct}%, #FFFFFF)`;
 
-/* ---------- carrousel d'ouverture ---------- */
-const SLIDES = [
-  { h:"Le miel, <b>en couleurs</b>", sub:"Dix miels d'Espagne et de Méditerranée, chacun avec sa couleur.", jars:["oranger"], cta:["Découvrir la collection","#boutique"] },
-  { h:"Puissant et <b>aromatique</b>", sub:"Le Miel de Thym, un miel de garrigue au caractère affirmé.", jars:["thym"], cta:["Découvrir le thym","produit.html?p=thym"] },
-  { h:"Trois miels, <b>un coffret</b>", sub:"Composez votre trio et offrez-le dans sa boîte KŌMI.", jars:["lavande","relaxation","eucalyptus"], cta:["Composer un trio","produit.html?p=lavande"], accent:"#EF2970" },
-  { h:"Fin et <b>parfumé</b>", sub:"Le Miel de Lavande, floral et crémeux.", jars:["lavande"], cta:["Découvrir la lavande","produit.html?p=lavande"] },
-];
-const hcopy = $("#hcopy"), hvis = $("#hvis"), hnav = $("#hnav"), hero = $("#hero"), DUR = 6000;
-hcopy.innerHTML = SLIDES.map((s,i)=>`<div class="hs" aria-hidden="true">${i?"<h2":"<h1"} class="lead-t">${s.h}${i?"</h2>":"</h1>"}<p class="sub">${s.sub}</p><div class="row"><a class="btn dark" href="${s.cta[1]}">${s.cta[0]}</a>${i===0?'<a class="more" href="#gouts">Choisir par goût</a>':""}</div></div>`).join("");
-hvis.insertAdjacentHTML("beforeend", SLIDES.map(s=>`<div class="hv${s.jars.length>1?" trio":""}">${s.jars.map(j=>`<img src="${jarSrc(P(j))}" alt="${P(j).name}">`).join("")}</div>`).join(""));
-hnav.innerHTML = SLIDES.map((s,i)=>`<button class="d" aria-label="Diapositive ${i+1}"><i></i></button>`).join("") + `<span class="arrows"><button id="hp" aria-label="Précédent"><svg viewBox="0 0 16 16"><path d="M10 3 5 8l5 5"/></svg></button><button id="hn" aria-label="Suivant"><svg viewBox="0 0 16 16"><path d="m6 3 5 5-5 5"/></svg></button></span>`;
-const hs = $$(".hs"), hv = $$(".hv"), dots = $$(".hnav .d");
-let ci = -1, timer;
-function show(i){
-  ci = (i + SLIDES.length) % SLIDES.length; const s = SLIDES[ci], accent = s.accent || P(s.jars[0]).color;
-  hs.forEach((e,k)=>{ e.classList.toggle("on", k===ci); e.setAttribute("aria-hidden", String(k!==ci)); });
-  hv.forEach((e,k)=>e.classList.toggle("on", k===ci));
-  dots.forEach((d,k)=>{ d.classList.toggle("done", k<ci); d.classList.remove("on"); });
-  void dots[ci].offsetWidth; dots[ci].classList.add("on");
-  hero.style.setProperty("--tint", mix(accent, 14)); hero.style.setProperty("--accent", accent);
-  clearTimeout(timer); if(!reduceMotion) timer = setTimeout(()=>show(ci+1), DUR);
-}
-hero.style.setProperty("--dur", DUR + "ms");
-dots.forEach((d,k)=>d.addEventListener("click", ()=>show(k)));
-$("#hn").addEventListener("click", ()=>show(ci+1)); $("#hp").addEventListener("click", ()=>show(ci-1));
-let sx = null; hero.addEventListener("pointerdown", e=>sx = e.clientX); hero.addEventListener("pointerup", e=>{ if(sx!==null && Math.abs(e.clientX-sx) > 50) show(ci + (e.clientX < sx ? 1 : -1)); sx = null; });
-show(0);
-
 /* ---------- bandeau ---------- */
-const words = ["100 % miel","Pots en verre","Couvercle doré satiné","Dix couleurs","Coffrets cadeaux","Livraison en France"];
-$("#marq").innerHTML = [...words,...words].map(w=>`<span>${w}</span>`).join("");
+/* Emplacement des logos presse : à remplacer par les vrais logos quand KŌMI sera cité dans les médias */
+const words = [["100 % miel","m1"],["Pots en verre","m2"],["Couvercle doré","m3"],["Dix couleurs","m4"],["Coffrets cadeaux","m2"],["Espagne & Méditerranée","m3"]];
+$("#marq").innerHTML = [...words,...words].map(([w,c])=>`<span class="${c}">${w}</span>`).join("");
 
 /* ---------- meilleures ventes (à remplacer par les vraies ventes sur Shopify) ---------- */
 const BEST = ["oranger","thym","lavande","relaxation"];
