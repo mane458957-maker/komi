@@ -7,7 +7,7 @@
 <meta name="description" content="KŌMI, des miels premium accessibles. Dix références, une couleur par miel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Lato:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/komi.css?v=1794982795">
+<link rel="stylesheet" href="assets/komi.css?v=1794983181">
 <style>
 /* Version « luxe » : beaucoup de blanc et de crème, la couleur n'arrive que par touches, typographie fine. */
 :root{--line:rgba(17,17,17,.1);--soft:#F3EEE6}
@@ -94,6 +94,7 @@ section.s{padding-block:clamp(64px,8vw,110px)}
 .life .scene{position:relative;aspect-ratio:16/11;border-radius:28px;overflow:hidden;background:linear-gradient(180deg,var(--wall,#F3E9DD) 0 64%,var(--top,#C9A27A) 64% 67%,var(--wood,#B78A5E) 67%)}
 .life .scene::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 75% 20%,rgba(255,255,255,.7),transparent 55%)}
 .life .scene img{position:absolute;bottom:22%;left:50%;width:30%;transform:translateX(-50%);filter:drop-shadow(0 18px 14px rgba(60,30,10,.35))}
+.life .scene img.photo{inset:0;left:0;bottom:0;width:100%;height:100%;object-fit:cover;object-position:50% 28%;transform:none;filter:none}
 .life .scene .x2{left:24%;width:22%;bottom:24%;opacity:.95}
 .life .scene .x3{left:78%;width:20%;bottom:25%}
 .life .scene .ph{position:absolute;right:16px;top:16px;background:rgba(255,255,255,.85);border-radius:999px;padding:6px 12px;font-family:var(--title);font-weight:600;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase}
@@ -313,7 +314,7 @@ section.s{padding-block:clamp(64px,8vw,110px)}
   </div>
 </footer>
 
-<script src="assets/komi.js?v=1794982795"></script>
+<script src="assets/komi.js?v=1794983181"></script>
 <script>
 const P = id => byId(id);
 const short = p => p.name.replace(/^Miel (d'|de )/,"");
@@ -349,15 +350,15 @@ fill("best");
 
 /* 2. le produit en situation (photos d'ambiance à générer) */
 const LIFE = [
-  { t:"Au petit-déjeuner", d:"Un filet de Miel d'Oranger sur un yaourt grec, quelques pistaches. Le réveil devient doux.", jars:["oranger"], wall:"#F6ECDF", top:"#D9B48A", wood:"#C19466" },
+  { t:"Au petit-déjeuner", d:"Une tartine dorée, un bol de granola et une cuillère de Miel Énergie pour bien démarrer la journée.", photo:"img/life-energie.webp", jars:["energie"], wall:"#F6ECDF", top:"#D9B48A", wood:"#C19466" },
   { t:"Sur le plateau de fromages", d:"Le Miel de Thym et un chèvre frais : l'accord qui fait toujours son effet à l'apéritif.", jars:["thym","jujubier"], wall:"#EFE6E9", top:"#B98C67", wood:"#A57A55" },
   { t:"Dans votre thé du soir", d:"Une cuillère de Relaxation dans une infusion pas trop chaude, et la soirée commence.", jars:["relaxation"], wall:"#EDE7F2", top:"#C7A584", wood:"#B08A68" },
   { t:"En cuisine", d:"Romarin dans une vinaigrette, Eucalyptus sur des fruits rôtis. Le miel s'invite partout.", jars:["romarin","eucalyptus","lavande"], wall:"#E9F0EA", top:"#CFAE86", wood:"#B88F64" },
 ];
 $("#lifeRail").innerHTML = LIFE.map(l=>`<article class="life">
   <div class="scene" style="--wall:${l.wall};--top:${l.top};--wood:${l.wood}" role="img" aria-label="${l.t}">
-    <span class="ph">Photo d'ambiance à venir</span>
-    ${l.jars.map((j,k)=>`<img class="${k===1?"x2":k===2?"x3":""}" src="${jarSrc(P(j))}" alt="" loading="lazy">`).join("")}
+    ${l.photo?`<img class="photo" src="${l.photo}" alt="${l.t}" loading="lazy">`:`<span class="ph">Photo d'ambiance à venir</span>
+    ${l.jars.map((j,k)=>`<img class="${k===1?"x2":k===2?"x3":""}" src="${jarSrc(P(j))}" alt="" loading="lazy">`).join("")}`}
   </div><h3>${l.t}</h3><p>${l.d}</p></article>`).join("");
 rail($("#lifeRail"));
 
