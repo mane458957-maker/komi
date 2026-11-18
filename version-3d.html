@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>KŌMI</title>
+<meta name="description" content="KŌMI, des miels premium accessibles. Dix références, une couleur par miel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Lato:wght@400;700&display=swap">
+<link rel="stylesheet" href="assets/komi.css">
+<style>
+/* Accueil KŌMI : un pot voyage dans la page (arc → étiquette → carte), une couleur par miel. */
+:root{--flav:#F59A23;--ease:cubic-bezier(.22,.8,.24,1);--dark:#191a1e}
+.disp{font-family:var(--title);font-weight:800;text-transform:uppercase;letter-spacing:-.01em;line-height:.92}
+
+/* ---------- scène 3D : tous les pots vivent dans cette couche fixe ---------- */
+#stage{position:fixed;inset:0;z-index:2;pointer-events:none;perspective:1700px;overflow:hidden}
+.j3{position:absolute;left:-200px;top:-260px;width:400px;height:520px;transform-style:preserve-3d;will-change:transform;visibility:hidden}
+.j3 .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.j3 .face img{width:100%;height:100%;object-fit:contain;display:block}
+.j3 .back{transform:rotateY(180deg)}
+.j3 .back img{transform:scaleX(-1);filter:saturate(.9)}
+.j3 .jsh{position:absolute;left:12%;right:12%;bottom:-3%;height:8%;border-radius:50%;background:radial-gradient(closest-side,rgba(40,15,0,.4),transparent);transform:translateZ(-30px);filter:blur(6px)}
+.blab{position:absolute;left:16%;right:16%;top:33%;bottom:10%;background:#FBF8F2;border-radius:7% / 5%;padding:7% 6% 5%;color:#2a1f18;font-family:var(--text);display:flex;flex-direction:column;gap:3.2%;text-align:center;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.05)}
+.blab .bt{font-family:var(--title);font-weight:700;font-size:20px;letter-spacing:.06em;color:var(--black)}
+.blab .bn{font-family:var(--title);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--bc)}
+.blab .bh{font-family:var(--title);font-weight:700;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;border-top:1px solid rgba(0,0,0,.15);padding-top:4%}
+.blab p{margin:0;font-size:10px;line-height:1.35}
+.blab .bar{margin:auto auto 0;width:62%;height:26px;background:repeating-linear-gradient(90deg,#222 0 2px,transparent 2px 3px,#222 3px 4px,transparent 4px 7px,#222 7px 8px,transparent 8px 9px)}
+.j3 .back .band{position:absolute;left:43.5%;width:13%;top:7%;height:27%;background:var(--bc);border-radius:2px;clip-path:polygon(0 0,100% 0,100% 88%,50% 100%,0 88%)}
+.blab .w{display:flex;justify-content:space-between;font-family:var(--title);font-weight:700;font-size:10px}
+
+/* ---------- 1. l'arc des miels ---------- */
+#miels{position:relative;height:100vh;height:100svh;min-height:520px;overflow:hidden;background:var(--flav);touch-action:pan-y;cursor:grab}
+body.dragging,body.dragging *{cursor:grabbing!important;user-select:none}
+.reveal{position:absolute;inset:0;background:var(--rv,transparent)}
+.rings{position:absolute;left:50%;top:41%;width:calc(2200 * var(--u));height:calc(2200 * var(--u));transform:translate(-50%,-50%);border-radius:50%;background:repeating-radial-gradient(circle,rgba(255,255,255,.14) 0,rgba(255,255,255,.02) calc(40 * var(--u)),rgba(255,255,255,.14) calc(80 * var(--u)));-webkit-mask-image:radial-gradient(circle,#000 0 22%,rgba(0,0,0,.55) 34%,transparent 52%);mask-image:radial-gradient(circle,#000 0 22%,rgba(0,0,0,.55) 34%,transparent 52%);pointer-events:none}
+.bits .bit{position:absolute;filter:blur(1.5px);opacity:.6;pointer-events:none;animation:drift var(--d) ease-in-out infinite alternate}
+.bits .bit svg{width:100%;height:100%;display:block}
+@keyframes drift{to{translate:var(--dx) var(--dy);rotate:var(--dr)}}
+#title{position:absolute;left:0;right:0;top:calc(50% + 250 * var(--u));text-align:center;z-index:60;margin:0;color:var(--tx,#fff);font-size:calc(92 * var(--u));pointer-events:none}
+#title .wd{display:inline-block;white-space:nowrap;overflow:hidden;padding:0 .12em .04em;vertical-align:top}
+#title .ch{display:inline-block}
+#count{position:absolute;right:calc(50% - 720 * var(--u) + 28 * var(--u));top:calc(50% + 190 * var(--u));font-size:calc(200 * var(--u));color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.9);z-index:1;pointer-events:none;font-variant-numeric:tabular-nums}
+#play{position:absolute;left:50%;top:calc(50% + 175 * var(--u));transform:translate(-50%,-50%);width:max(44px,calc(52 * var(--u)));height:max(44px,calc(52 * var(--u)));border-radius:50%;border:0;background:#fff;box-shadow:0 6px 20px rgba(40,28,60,.14);z-index:60;display:grid;place-items:center;transition:transform .25s}
+#play svg{width:18px;height:18px;fill:none;stroke:var(--black);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
+#play:hover{transform:translate(-50%,-50%) scale(1.08)}#play:hover svg{transform:translateX(2px)}
+#play:active{transform:translate(-50%,-50%) scale(.94)}
+#auto{position:absolute;right:calc(50% - 720 * var(--u) + 40 * var(--u));top:calc(50% + 150 * var(--u));z-index:60;display:flex;align-items:center;gap:10px;background:none;border:0;color:#fff;font-family:var(--title);font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+#auto i{width:26px;height:26px;border-radius:50%;box-shadow:inset 0 0 0 1.3px #fff;display:grid;place-items:center}
+#auto svg{width:10px;height:10px;fill:#fff}
+.hint{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);font-family:var(--title);font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#fff;opacity:.85;z-index:60;pointer-events:none;white-space:nowrap}
+.fadein{opacity:0}
+.fadein.in{opacity:1;transition:opacity .6s ease}
+
+/* ---------- 2. l'étiquette, épinglée ---------- */
+#etiquette{position:relative;height:500vh;background:var(--flav);color:#fff}
+#etiquette .pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.in-dark{position:absolute;inset:0;background:#160d08;opacity:0}
+.fr2{position:absolute;left:50%;top:50%;width:1440px;height:900px;transform:translate(-50%,-50%) scale(var(--k,1))}
+.in-num{position:absolute;left:463px;top:230px;width:640px;text-align:center;font-size:400px;color:transparent;-webkit-text-stroke:1.6px rgba(255,255,255,.9)}
+#inBar{position:absolute;left:560px;top:160px;width:446px;height:580px}
+.in-head{position:absolute;left:40px;top:280px;font-size:68px;max-width:470px;color:#fff;margin:0}
+.in-head.small{font-size:52px}
+.in-icons{position:absolute;left:1292px;top:300px;display:grid;gap:6px}
+.in-icons button{width:66px;height:66px;border-radius:50%;border:0;box-shadow:inset 0 0 0 1.5px #fff;background:transparent;display:grid;place-items:center;color:#fff;transition:background .3s,color .3s}
+.in-icons button.on{background:#FBF8F2;color:var(--black)}
+.in-icons svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.in-cap{position:absolute;right:42px;top:620px;text-align:right;font-family:var(--title);font-weight:600;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.95);line-height:1.6;margin:0}
+.xf{will-change:opacity,translate}
+#storm{position:absolute;inset:0;pointer-events:none}
+#storm .sp{position:absolute;left:0;top:0;width:100px;height:100px;margin:-50px 0 0 -50px;opacity:0}
+#storm .sp svg{width:100%;height:100%;display:block}
+
+/* ---------- 3. la collection ---------- */
+#boutique{background:var(--cream);padding:calc(96 * var(--w)) calc(39 * var(--w)) calc(80 * var(--w));position:relative}
+.sh-head{font-size:calc(94 * var(--w));line-height:.86;margin:0;color:var(--black)}
+.sh-head .ln,.tr-head .ln{display:block;overflow:hidden}
+.sh-head .ln>span,.tr-head .ln>span{display:block;transform:translateY(105%);transition:transform 1s var(--ease)}
+.sh-head.in .ln>span,.tr-head.in .ln>span{transform:none}
+.sh-head.in .ln:nth-child(2)>span,.tr-head.in .ln:nth-child(2)>span{transition-delay:.08s}
+.tr-head.in .ln:nth-child(3)>span{transition-delay:.16s}
+.sh-cap{position:absolute;left:calc(1080 * var(--w));top:calc(120 * var(--w));font-family:var(--title);font-weight:500;font-size:calc(15.5 * var(--w));line-height:1.45;max-width:calc(320 * var(--w));margin:0;opacity:0;translate:0 24px;transition:opacity 1s var(--ease),translate 1s var(--ease)}
+.sh-cap.in{opacity:1;translate:0 0}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:calc(18 * var(--w));margin-top:calc(34 * var(--w));perspective:1200px}
+.sc{position:relative;height:calc(390 * var(--w));border-radius:calc(22 * var(--w));background:var(--c);transform-style:preserve-3d;transition:transform .5s var(--ease),box-shadow .5s,opacity .8s,translate .8s;cursor:pointer;opacity:0;translate:0 30px}
+.sc.in{opacity:1;translate:0 0}
+.sc .nm{position:absolute;left:0;right:0;top:calc(24 * var(--w));text-align:center;font-size:calc(26 * var(--w));color:var(--fg);line-height:.95;padding:0 8px}
+.sc .pk{position:absolute;left:50%;top:calc(104 * var(--w));width:calc(190 * var(--w));aspect-ratio:400/520;transform:translateX(-50%) translateZ(30px);filter:drop-shadow(0 calc(12 * var(--w)) calc(12 * var(--w)) rgba(40,15,0,.3))}
+.sc .pk img{width:100%;height:100%;object-fit:contain}
+.sc.live .pk{visibility:hidden}
+.sc .pr{position:absolute;left:calc(18 * var(--w));bottom:calc(20 * var(--w));font-family:var(--title);font-weight:600;font-size:max(12px,calc(14 * var(--w)));color:var(--fg);transform:translateZ(20px)}
+.sc .plus{position:absolute;right:calc(16 * var(--w));bottom:calc(15 * var(--w));width:max(34px,calc(44 * var(--w)));height:max(34px,calc(44 * var(--w)));border-radius:50%;border:0;background:var(--black);box-shadow:0 0 0 2px #fff;display:grid;place-items:center;transform:translateZ(40px);transition:transform .2s}
+.sc .plus:hover{transform:translateZ(40px) scale(1.1)}
+.sc .plus svg{width:16px;height:16px;stroke:#fff;stroke-width:2.2;stroke-linecap:round}
+
+/* ---------- 4. composez votre trio ---------- */
+#trio{background:var(--dark);color:var(--cream);min-height:100vh;min-height:100svh;overflow:hidden;position:relative;padding:max(calc(92 * var(--w)),calc((100vh - 560 * var(--w)) / 2)) calc(50 * var(--w)) calc(100 * var(--w))}
+.tr-grid{display:grid;grid-template-columns:1fr 1fr;gap:calc(40 * var(--w));align-items:center}
+.tr-head{font-size:calc(70 * var(--w));line-height:.93;margin:0}
+.tr-head b{display:inline-grid;place-items:center;width:calc(74 * var(--w));height:calc(72 * var(--w));border-radius:calc(14 * var(--w));background:var(--cream);color:var(--dark);font-size:.86em;vertical-align:middle}
+.tr-sub{margin:calc(18 * var(--w)) 0 0;font-size:max(13px,calc(15 * var(--w)));opacity:.75;max-width:40ch}
+.thumbs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:calc(16 * var(--w));margin-top:calc(34 * var(--w))}
+.th{border:0;background:none;color:var(--cream);display:flex;flex-direction:column;align-items:center;gap:8px;padding:0;position:relative}
+.th .sq{width:100%;aspect-ratio:1;border-radius:calc(16 * var(--w));background:var(--c);display:grid;place-items:end center;overflow:hidden;transition:transform .25s}
+.th:hover .sq{transform:translateY(-4px)}
+.th .sq img{width:58%;margin-bottom:-6%}
+.th span:not(.sq){font-family:var(--title);font-weight:700;font-size:max(9px,calc(11 * var(--w)));text-transform:uppercase;letter-spacing:.06em}
+.th em{position:absolute;top:-6px;right:-6px;min-width:24px;height:24px;border-radius:12px;background:var(--cream);color:var(--dark);font:700 12px/24px var(--title);font-style:normal;text-align:center;transform:scale(0);transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.th em.on{transform:scale(1)}
+.glow{position:relative;width:100%;aspect-ratio:1;max-width:calc(600 * var(--w));margin:auto}
+.glow::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,var(--g,rgba(245,154,35,.72)) 0,color-mix(in srgb,var(--g,rgba(245,154,35,.72)) 50%,transparent) 32%,transparent 68%);animation:pulse .6s ease}
+.glow.p::before{animation:none}
+@keyframes pulse{from{opacity:.55}}
+.slot{position:absolute;width:28%;height:40%;transform:translate(-50%,-50%);display:grid;place-items:center}
+.slot:nth-child(1){left:50.2%;top:37%}.slot:nth-child(2){left:34.8%;top:59.3%}.slot:nth-child(3){left:64.8%;top:59.3%}
+.slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 calc(14 * var(--w)) calc(14 * var(--w)) rgba(0,0,0,.45));animation:land .55s var(--ease)}
+@keyframes land{from{transform:translateY(calc(-40 * var(--w))) scale(.8);opacity:0}}
+.slot .x{position:relative;z-index:1;width:max(32px,calc(48 * var(--w)));height:max(32px,calc(48 * var(--w)));border-radius:50%;border:0;background:var(--dark);box-shadow:inset 0 0 0 2px var(--cream);color:var(--cream);font-size:16px;display:grid;place-items:center;transition:transform .4s var(--ease)}
+.slot.full .x{transform:translateY(calc(-118 * var(--w))) scale(.85)}
+.slot:not(.full) .x{pointer-events:none;opacity:.6}
+#buy{margin-top:calc(30 * var(--w));width:100%;min-height:max(44px,calc(56 * var(--w)));border:0;border-radius:999px;background:var(--cream);color:var(--dark);font-family:var(--title);font-weight:700;font-size:max(14px,calc(16 * var(--w)));display:flex;align-items:center;justify-content:center;gap:12px;transition:opacity .3s,background .3s}
+#buy small{font-weight:600;opacity:.7;font-size:1em}
+#buy:disabled{opacity:.38;cursor:not-allowed}
+#buy.ok{background:#8fb39a;opacity:1}
+.fly{position:fixed;z-index:70;pointer-events:none;filter:drop-shadow(0 10px 14px rgba(0,0,0,.25))}
+.icon.cart.bump{animation:bump .32s ease}
+@keyframes bump{50%{transform:scale(1.18)}}
+
+/* ---------- fin de page ---------- */
+.story{display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:center}
+.story h2{font-size:clamp(2.2rem,5vw,3.6rem);margin:12px 0 18px}
+.story p{color:var(--ink-soft);max-width:48ch;margin:0 0 14px}
+.news{background:var(--orange);color:var(--white);border-radius:var(--r);padding:40px clamp(22px,4vw,48px);display:grid;gap:20px;position:relative;overflow:hidden}
+.news::after{content:"";position:absolute;width:300px;aspect-ratio:1;border-radius:50%;background:var(--fuchsia);right:-110px;top:-140px}
+.news h2{font-size:clamp(1.8rem,3vw,2.4rem);position:relative;margin:0}
+.news p{margin:8px 0 0;position:relative}
+.news form{display:flex;gap:10px;position:relative;z-index:1;flex-wrap:wrap}
+.news input{flex:1;min-width:0;border:0;border-radius:999px;padding:15px 20px;font:inherit;color:var(--black);background:var(--white)}
+.news .ok{margin:0;font-family:var(--title);font-weight:600;position:relative}
+
+/* ---------- téléphone ---------- */
+@media (max-width:819px){
+  #title{top:auto;bottom:calc(96px + env(safe-area-inset-bottom,0px));font-size:var(--tsize,48px);line-height:.95}
+  #count{right:14px;top:calc(var(--hdr-h,56px) + var(--ann-h,0px) + 10px);font-size:56px}
+  #auto{right:16px;top:calc(var(--hdr-h,56px) + var(--ann-h,0px) + 78px)}
+  #play{top:auto;bottom:calc(112px + env(safe-area-inset-bottom,0px) + var(--tlines,1) * var(--tsize,48px));transform:translateX(-50%);width:48px;height:48px}
+  #play:hover,#play:active{transform:translateX(-50%)}
+  .rings{width:1500px;height:1500px;background:repeating-radial-gradient(circle,rgba(255,255,255,.14) 0,rgba(255,255,255,.02) 30px,rgba(255,255,255,.14) 60px)}
+  .fr2{width:390px;height:780px}
+  .in-head{left:16px;top:84px;font-size:40px}.in-head.small{font-size:32px}
+  .in-num{left:0;width:390px;top:240px;font-size:210px}
+  #inBar{left:95px;top:226px;width:200px;height:260px}
+  .in-icons{left:50%;top:auto;bottom:118px;transform:translateX(-50%);grid-auto-flow:column;gap:8px}
+  .in-icons button{width:52px;height:52px}
+  .in-cap{left:0;right:0;top:auto;bottom:62px;text-align:center;font-size:11.5px}
+  #boutique{padding:64px 0 60px}
+  .sh-head{font-size:58px;padding:0 18px}
+  .sh-cap{position:static;font-size:13.5px;max-width:none;padding:14px 18px 0}
+  .cards{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding:10px 18px 30px;margin-top:10px;scrollbar-width:none}
+  .cards::-webkit-scrollbar{display:none}
+  .sc{flex:0 0 68vw;max-width:300px;height:min(108vw,440px);border-radius:18px;scroll-snap-align:center}
+  .sc .nm{font-size:24px;top:20px}
+  .sc .pk{width:58%;top:24%}
+  .sc .pr{left:16px;bottom:18px;font-size:14px}
+  .sc .plus{width:44px;height:44px;right:14px;bottom:14px}
+  #trio{padding:72px 18px 70px}
+  .tr-grid{grid-template-columns:1fr;gap:6px}
+  .tr-head{font-size:42px}
+  .tr-head b{width:50px;height:48px;border-radius:10px}
+  .tr-sub{font-size:14px}
+  .glow{max-width:360px}
+  .thumbs{gap:8px;margin-top:20px}
+  .th span:not(.sq){font-size:8.5px}
+  .story{grid-template-columns:1fr;gap:32px}
+  .news form{flex-direction:column}.news form .btn{width:100%}
+}
+@media (min-width:820px) and (max-height:560px){#count{right:24px;top:72px;font-size:52px}#auto{right:26px;top:136px}}
+@media (prefers-reduced-motion:reduce){.bits .bit{animation:none;opacity:.55}}
+</style>
+</head>
+<body data-page="home">
+
+<div id="stage" aria-hidden="true"></div>
+
+<div class="announce" id="announce"><span>Livraison en France · Paiement sécurisé · Coffrets cadeaux</span></div>
+<header class="hdr clear" id="hdr">
+  <div class="wrap">
+    <button class="icon burger" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <nav><a href="#miels">Nos miels</a><a href="#etiquette">L'étiquette</a><a href="#boutique">Boutique</a><a href="#trio">Coffret trio</a></nav>
+    <a class="logo" href="index.html" aria-label="KŌMI, accueil">KŌMI</a>
+    <div class="tools">
+      <button class="icon hide-s" aria-label="Rechercher"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></button>
+      <button class="icon hide-s" aria-label="Mon compte"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.4-3.6 4.2-5.3 7.5-5.3s6.1 1.7 7.5 5.3"/></svg></button>
+      <button class="icon cart" id="cartBtn" aria-label="Panier, 0 article"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span class="n">0</span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- 1. L'ARC DES MIELS -->
+<section id="miels" aria-label="Choisir un miel">
+  <div class="reveal" id="reveal"></div>
+  <div class="rings fadein" id="rings"></div>
+  <div class="bits" id="bits"></div>
+  <span class="disp" id="count" aria-hidden="true">01</span>
+  <button id="play" class="fadein" aria-label="Miel suivant"><svg viewBox="0 0 18 18"><path d="M2 9h13M10 4l5 5-5 5"/></svg></button>
+  <h1 class="disp" id="title" aria-live="polite"></h1>
+  <button id="auto" class="fadein" aria-pressed="true"><i><svg viewBox="0 0 10 10" id="autoIco"><rect x="1.5" y="1" width="2.4" height="8" rx="1"/><rect x="6.1" y="1" width="2.4" height="8" rx="1"/></svg></i>Défilement</button>
+  <span class="hint">Glissez ou cliquez un pot</span>
+</section>
+
+<!-- 2. L'ÉTIQUETTE (le pot se retourne) -->
+<section id="etiquette" aria-label="Ce qu'il y a dans le pot">
+  <div class="pin">
+    <div class="in-dark" id="inDark"></div>
+    <div id="storm"></div>
+    <div class="fr2" id="fr2">
+      <div class="in-num disp xf" id="inNum">01</div>
+      <div id="inBar"></div>
+      <h2 class="in-head disp xf" id="inHead"></h2>
+      <div class="in-icons" id="inIcons">
+        <button aria-label="Étape 1 : l'origine"><svg viewBox="0 0 24 24"><path d="M3 19 10 8l4 6 3-4 4 9Z"/><circle cx="17" cy="5" r="2"/></svg></button>
+        <button aria-label="Étape 2 : l'étiquette"><svg viewBox="0 0 24 24"><path d="M7 3h10l3 5v13H4V8Z"/><path d="M8 12h8M8 16h5"/></svg></button>
+        <button aria-label="Étape 3 : le pot"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="4" rx="1.5"/><path d="M7 7h10l1 3v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-9Z"/></svg></button>
+        <button aria-label="Étape 4 : votre miel"><svg viewBox="0 0 24 24"><path d="M12 3c3 5 6 8 6 11a6 6 0 0 1-12 0c0-3 3-6 6-11Z"/></svg></button>
+      </div>
+      <p class="in-cap xf" id="inCap"></p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. LA COLLECTION -->
+<section id="boutique">
+  <h2 class="sh-head disp" id="shHead"><span class="ln"><span>La</span></span><span class="ln"><span>collection</span></span></h2>
+  <p class="sh-cap" id="shCap">Dix miels, dix couleurs. Pot en verre de 250 g, couvercle doré satiné. Choisissez le vôtre, ou composez un trio.</p>
+  <div class="cards" id="cards"></div>
+</section>
+
+<!-- 4. COMPOSEZ VOTRE TRIO -->
+<section id="trio">
+  <div class="tr-grid">
+    <div>
+      <h2 class="tr-head disp" id="trHead"><span class="ln"><span>Composez</span></span><span class="ln"><span>votre <b>3</b> trio</span></span><span class="ln"><span>en coffret</span></span></h2>
+      <p class="tr-sub">Trois miels au choix dans la boîte KŌMI, avec une carte pour votre message. −10 % sur le coffret (offre d'exemple).</p>
+      <div class="thumbs" id="thumbs"></div>
+      <button id="buy" disabled>Choisissez encore 3 miels</button>
+    </div>
+    <div class="glow" id="glow"><div class="slot"><button class="x" aria-label="Retirer ce miel">✕</button></div><div class="slot"><button class="x" aria-label="Retirer ce miel">✕</button></div><div class="slot"><button class="x" aria-label="Retirer ce miel">✕</button></div></div>
+  </div>
+</section>
+
+<section class="block" id="histoire">
+  <div class="wrap story">
+    <div>
+      <p class="eyebrow" style="color:var(--fuchsia)">Notre histoire</p>
+      <h2>Un miel premium, une marque joyeuse</h2>
+      <p>KŌMI réunit des miels d'Espagne et des recettes aux plantes et épices de Méditerranée.</p>
+      <p>Des pots en verre, un couvercle doré, une couleur par miel. Pour que chaque pot se reconnaisse au premier regard.</p>
+    </div>
+    <div class="news">
+      <div><h2>Les nouveautés en premier</h2><p>Nouvelles saveurs, coffrets et recettes. Un email par mois.</p></div>
+      <form id="newsForm" novalidate><label for="newsMail" class="sr">Votre email</label><input id="newsMail" type="email" placeholder="Votre adresse email" autocomplete="email"><button class="btn dark" type="submit">S'inscrire</button></form>
+      <p class="ok" id="newsOk" hidden></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><a class="logo" href="index.html">KŌMI</a><p style="margin:0;color:var(--ink-soft);max-width:30ch">Miels premium accessibles. Paiement sécurisé, livraison en France.</p></div>
+      <div><h4>Boutique</h4><ul><li><a href="#boutique">Tous les miels</a></li><li><a href="#trio">Coffret trio</a></li><li><a href="index.html">Version slider</a></li></ul></div>
+      <div><h4>Aide</h4><ul><li><a href="#">FAQ</a></li><li><a href="#">Livraison &amp; retours</a></li><li><a href="#">Contact</a></li></ul></div>
+      <div><h4>Informations</h4><ul><li><a href="#">CGV</a></li><li><a href="#">Mentions légales</a></li><li><a href="#">Confidentialité</a></li><li><a href="#">Cookies</a></li></ul></div>
+    </div>
+    <div class="fine"><span>© 2026 KŌMI · Instagram · TikTok</span><span class="pay"><span>CB</span><span>Visa</span><span>Mastercard</span><span>Apple Pay</span><span>Google Pay</span></span><span>Maquette réalisée par Goual</span></div>
+  </div>
+</footer>
+
+<script src="assets/komi.js"></script>
+<script src="assets/art.js"></script>
+<script>
+/* ======================== OUTILS ======================== */
+const N = PRODUCTS.length, R = document.documentElement;
+const clamp = (v,a=0,b=1) => Math.min(b,Math.max(a,v));
+const lerp = (a,b,t) => a + (b-a)*t;
+const mod = j => ((j % N) + N) % N;
+const ioe = t => t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+const sine = t => -(Math.cos(Math.PI*t)-1)/2;
+function bezier(x1,y1,x2,y2){
+  const cx=3*x1, bx=3*(x2-x1)-cx, ax=1-cx-bx, cy=3*y1, by=3*(y2-y1)-cy, ay=1-cy-by;
+  const X=t=>((ax*t+bx)*t+cx)*t, Y=t=>((ay*t+by)*t+cy)*t, dX=t=>(3*ax*t+2*bx)*t+cx;
+  return x=>{ if(x<=0) return 0; if(x>=1) return 1; let t=x; for(let i=0;i<8;i++){ const d=dX(t); if(Math.abs(d)<1e-6) break; t-=(X(t)-x)/d; } return Y(clamp(t)); };
+}
+const glide = bezier(.25,.75,.2,1), entrance = bezier(.16,1,.3,1);
+const shortName = p => p.name.replace(/^Miel (d'|de )/i,"");
+const hexA = (h,a) => { const n = parseInt(h.slice(1),16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; };
+const ann = $("#announce"), hdr = $("#hdr");
+let vw = innerWidth, vh = innerHeight, phone = vw < 820;
+
+/* ======================== LES POTS 3D (CSS 3D, sans WebGL : se porte tel quel sur Shopify) ======================== */
+const stage = $("#stage"), BH = 520;
+function backLabel(p){
+  return `<div class="band" style="--bc:${p.color}"></div><div class="blab" style="--bc:${p.color}"><div class="bt">KŌMI</div><div class="bn">${p.name}</div>
+    <div class="bh">Composition</div><p>${p.ing.replace(" · ", ". Origine : ")}.</p>
+    <div class="bh">Dégustation</div><p>${p.tagline}. ${p.pairings.join(", ")}.</p>
+    <div class="bh">Conservation</div><p>À l'abri de la lumière et de la chaleur. Déconseillé aux enfants de moins d'un an.</p>
+    <div class="bar"></div><div class="w"><span>250 g</span><span>Lot · DDM</span></div></div>`;
+}
+function makeJar(){
+  const el = document.createElement("div"); el.className = "j3";
+  el.innerHTML = `<i class="jsh"></i><div class="face front"><img alt="" decoding="async"></div><div class="face back"><img alt="" decoding="async"></div>`;
+  stage.appendChild(el); return el;
+}
+function setJar(el, p){
+  if(el._id === p.id) return; el._id = p.id;
+  const [f,b] = el.querySelectorAll("img"); f.src = jarSrc(p); b.src = jarSrc(p);
+  el.querySelectorAll(".blab,.band").forEach(x=>x.remove());
+  el.querySelector(".back").insertAdjacentHTML("beforeend", backLabel(p));
+}
+function place(el, s){
+  if(!(s.op > .01)){ if(el.style.visibility !== "hidden") el.style.visibility = "hidden"; return; }
+  el.style.visibility = "visible"; el.style.opacity = s.op >= .999 ? "" : s.op.toFixed(3); // une opacité < 1 aplatit la 3D : on ne la pose que pendant les fondus
+  const sx = (s.sx||1)*s.h/BH, sy = (s.sy||1)*s.h/BH;
+  el.style.transform = `translate3d(${s.x.toFixed(1)}px,${s.y.toFixed(1)}px,${(s.z||0).toFixed(1)}px) rotateZ(${s.rz.toFixed(2)}deg) rotateY(${s.ry.toFixed(2)}deg) rotateX(${(s.rx||0).toFixed(2)}deg) scale(${sx.toFixed(4)},${sy.toFixed(4)})`;
+}
+PRODUCTS.forEach(p=>{ const i = new Image(); i.src = jarSrc(p); });
+
+/* ======================== 1. L'ARC ======================== */
+const hero = $("#miels"), title = $("#title"), count = $("#count"), reveal = $("#reveal");
+const SLOTS = [[0,0,400,0,0],[330,26,300,4,16],[600,50,272,8,26],[860,86,250,12,34],[1100,124,232,15,40]];
+let U = 1, spread = 1, cx = 0, cyRel = 0;
+let pos = -2.6, target = 0, tween = null, sel = 0, curStep = 0;
+const pool = Array.from({length:11}, makeJar), traveller = makeJar();
+
+function heroLayout(){
+  const H = hero.clientHeight;
+  U = phone ? Math.min(vw/560, H/980) : Math.min(vw/1440, H/900);
+  spread = phone ? 1.02 : 1;
+  cx = vw/2; cyRel = phone ? H*.42 : H/2 - 78*U;
+  hero.style.setProperty("--u", U + "px");
+}
+function arcState(k, now, j){
+  const a = Math.min(4, Math.abs(k)), i = Math.min(3, Math.floor(a)), f = a - i, A = SLOTS[i], B = SLOTS[i+1];
+  const L = n => A[n] + (B[n]-A[n])*f, sg = Math.sign(k);
+  const top = hero.getBoundingClientRect().top;
+  const b = reduceMotion ? 0 : Math.sin(now/4600*2*Math.PI + 1.37*j);
+  return { x: cx + sg*L(0)*U*spread, y: top + cyRel + L(1)*U - (.5*b+.5)*9*U, h: L(2)*U, rz: sg*L(3) + .4*b, ry: sg*L(4), rx:0,
+           z: -a*34*U, op: a<=3.3 ? 1 : clamp(1-(a-3.3)/.6) };
+}
+function goTo(t, dur){
+  target = t; const from = pos;
+  if(reduceMotion){ pos = t; tween = null; }
+  else tween = { from, to:t, t0: performance.now(), d: dur ?? (650 + 160*Math.max(0, Math.abs(t-from)-1)), curve: glide };
+  onSelect();
+}
+const step = n => { goTo(Math.round(target) + n); touch(); };
+
+/* titre lettre par lettre, compteur, couleur */
+const mctx = document.createElement("canvas").getContext("2d");
+function fitTitle(p){
+  const words = shortName(p).toUpperCase().split(" "); mctx.font = "800 100px Montserrat, Arial, sans-serif";
+  if(phone){
+    const w = Math.max(...words.map(x=>mctx.measureText(x).width));
+    hero.style.setProperty("--tsize", Math.min(clamp(vw*.125, 40, 64), (vw-36)*100/w) + "px"); hero.style.setProperty("--tlines", String(words.length));
+  } else title.style.fontSize = Math.min(92*U, 760*U*100/mctx.measureText(words.join(" ")).width) + "px";
+}
+const titleHTML = p => shortName(p).toUpperCase().split(" ").map(w=>`<span class="wd">${[...w].map(ch=>`<span class="ch">${ch}</span>`).join("")}</span>`).join(" ");
+function swapTitle(p, dir){
+  fitTitle(p); title.setAttribute("aria-label", p.name);
+  if(reduceMotion){ title.innerHTML = titleHTML(p); return; }
+  const old = [...title.querySelectorAll(".ch")];
+  old.forEach((ch,i)=>ch.animate([{transform:"translateY(0)",opacity:1},{transform:`translateY(${-110*dir}%)`,opacity:0}],{duration:300,delay:i*11,easing:"cubic-bezier(.45,0,.75,.3)",fill:"forwards"}));
+  clearTimeout(swapTitle.t);
+  swapTitle.t = setTimeout(()=>{
+    title.innerHTML = titleHTML(p);
+    [...title.querySelectorAll(".ch")].forEach((ch,i)=>ch.animate([{transform:`translateY(${110*dir}%)`,opacity:0},{transform:"translateY(0)",opacity:1}],{duration:620,delay:120+i*22,easing:"cubic-bezier(.22,1,.36,1)",fill:"backwards"}));
+  }, 120 + old.length*11);
+}
+function soft(el, swap){
+  if(reduceMotion){ swap(); return; }
+  el.animate([{translate:"0 0",opacity:1},{translate:"0 -10px",opacity:0}],{duration:220,easing:"cubic-bezier(.5,0,.75,0)",fill:"forwards"});
+  setTimeout(()=>{ swap(); el.animate([{translate:"0 14px",opacity:0},{translate:"0 0",opacity:1}],{duration:380,easing:"cubic-bezier(.22,1,.36,1)",fill:"forwards"}); }, 280);
+}
+let rv = null;
+function startReveal(color){
+  if(rv) endReveal();
+  hero.style.setProperty("--tx", textOn(color)==="#111111" ? "#111111" : "#ffffff");
+  if(reduceMotion){ R.style.setProperty("--flav", color); return; }
+  R.style.setProperty("--rv", color);
+  const H = hero.clientHeight, y = cyRel, far = Math.max(Math.hypot(cx, y), Math.hypot(vw-cx, y), Math.hypot(cx, H-y), Math.hypot(vw-cx, H-y));
+  rv = { color, t0: performance.now(), R: 1.45*far, y };
+}
+function revealFrame(now){
+  if(!rv) return;
+  const t = clamp((now - rv.t0)/420), r = rv.R*glide(t), f = Math.max(60, .35*r);
+  const m = `radial-gradient(circle at ${cx}px ${rv.y}px, #000 ${Math.max(0,r-f)}px, transparent ${r}px)`;
+  reveal.style.webkitMaskImage = m; reveal.style.maskImage = m;
+  if(t >= 1) endReveal();
+}
+function endReveal(){
+  if(rv){ R.style.setProperty("--flav", rv.color); rv = null; }
+  R.style.setProperty("--rv", "transparent"); reveal.style.webkitMaskImage = reveal.style.maskImage = "";
+}
+/* petits ingrédients flous qui dérivent dans l'arc */
+const BITS = [[.12,.22,120,-18],[.86,.2,96,22],[.07,.74,84,12],[.655,.15,78,-10],[.205,.885,70,30]];
+const bitsEl = $("#bits");
+BITS.forEach(([x,y,s,r],i)=>bitsEl.insertAdjacentHTML("beforeend", `<div class="bit" style="left:${x*100}%;top:${y*100}%;width:calc(${s} * var(--u) * ${phone?1.3:1});height:calc(${s} * var(--u) * ${phone?1.3:1});rotate:${r}deg;--d:${7+.9*i}s;--dx:${i%2?13:-12}px;--dy:${-(22+3*i)}px;--dr:${r+(i%2?11:-10)}deg${phone && [1,3,4].includes(i)?";display:none":""}"></div>`));
+function setBits(p){ [...bitsEl.children].forEach((b,i)=>{ const [kind,...args] = PIECES[p.id][i]; b.innerHTML = ART[kind](...args); }); }
+
+function onSelect(){
+  const j = Math.round(target), f = mod(j);
+  if(f === sel) return;
+  const dir = j >= Math.round(pos) ? 1 : -1;
+  sel = f; const p = PRODUCTS[f];
+  startReveal(p.color);
+  swapTitle(p, dir);
+  soft(count, ()=>count.textContent = String(f+1).padStart(2,"0"));
+  setBits(p);
+  $$(".sc").forEach((c,k)=>c.classList.toggle("live", k===f));
+  if(curStep === 3) soft(inHead, ()=>setHead(3));
+}
+
+/* glisser, cliquer, clavier, défilement automatique */
+let lastAct = -1e9, auto = !reduceMotion, drag = null;
+const touch = () => lastAct = performance.now();
+hero.addEventListener("pointerdown", e=>{
+  if(e.button!==0 || e.target.closest("button,a")) return;
+  drag = { x0:e.clientX, pos0:pos, on:false, v:0, lx:e.clientX, lt:performance.now(), id:e.pointerId };
+});
+addEventListener("pointermove", e=>{
+  if(!drag) return; const dx = e.clientX - drag.x0;
+  if(!drag.on && Math.abs(dx) > 6){ drag.on = true; tween = null; document.body.classList.add("dragging"); try{ hero.setPointerCapture(drag.id); }catch(_){} }
+  if(drag.on){
+    const slot = 330*U*spread; pos = drag.pos0 - dx/slot;
+    const now = performance.now(), dt = Math.max(1, now - drag.lt), v = -(e.clientX - drag.lx)/slot/dt;
+    drag.v = lerp(drag.v, v, .4); drag.lx = e.clientX; drag.lt = now; touch();
+  }
+});
+function endDrag(e, cancel){
+  if(!drag) return; const d = drag; drag = null; document.body.classList.remove("dragging");
+  if(d.on){ const to = Math.round(pos + clamp(d.v*220,-2,2)); if(!(cancel && Math.abs(pos-Math.round(pos))<.02)) goTo(to, Math.max(380, 650*Math.min(1, Math.abs(to-pos)+.35))); touch(); return; }
+  if(cancel) return;
+  let best = null; const now = performance.now();
+  for(let k=-4;k<=4;k++){ if(!k) continue; const s = arcState(Math.round(target)+k-pos, now, 0);
+    if(s.op>.2 && Math.abs(e.clientX-s.x) < s.h*.4 && Math.abs(e.clientY-s.y) < s.h/2 && (best===null || Math.abs(k)<Math.abs(best))) best = k; }
+  if(best!==null){ goTo(Math.round(target)+best); touch(); }
+}
+addEventListener("pointerup", e=>endDrag(e,false)); addEventListener("pointercancel", e=>endDrag(e,true));
+$("#play").addEventListener("click", ()=>step(1));
+addEventListener("keydown", e=>{ if(hero.getBoundingClientRect().bottom < vh*.5) return; if(e.key==="ArrowRight") step(1); if(e.key==="ArrowLeft") step(-1); });
+$("#auto").addEventListener("click", ()=>{ auto = !auto; $("#auto").setAttribute("aria-pressed", String(auto));
+  $("#autoIco").innerHTML = auto ? '<rect x="1.5" y="1" width="2.4" height="8" rx="1"/><rect x="6.1" y="1" width="2.4" height="8" rx="1"/>' : '<path d="M2 1l7 4-7 4Z"/>'; touch(); });
+if(!auto) $("#auto").click();
+setInterval(()=>{ const r = hero.getBoundingClientRect(), vis = (Math.min(vh, r.bottom) - Math.max(0, r.top)) / r.height;
+  if(auto && !drag && document.visibilityState==="visible" && vis >= .6 && performance.now()-lastAct > 3200){ goTo(Math.round(target)+1); lastAct = performance.now(); } }, 300);
+
+/* ======================== 2. L'ÉTIQUETTE ======================== */
+const sec2 = $("#etiquette"), fr2 = $("#fr2"), inBar = $("#inBar"), inHead = $("#inHead"), inNum = $("#inNum"), inCap = $("#inCap"), inDark = $("#inDark"), storm = $("#storm"), inIcons = $("#inIcons");
+const STEPS = [
+  { head:"Récolté<br>en Espagne", cap:"Des miels de Méditerranée.<br>Une couleur pour chacun.", ry:0 },
+  { head:"Tout est<br>écrit<br>au dos", cap:"Composition, origine, conservation.<br>Rien à cacher.", ry:180 },
+  { head:"Un<br>couvercle<br>doré", cap:"Verre transparent, couvercle satiné.<br>Un pot qui se garde.", ry:360 },
+  { head:"", cap:"Pot de 250 g.<br>Une couleur par miel.", ry:720 },
+];
+function setHead(i){
+  if(i===3){ const w = shortName(PRODUCTS[sel]).toUpperCase().split(" "); inHead.classList.toggle("small", w.some(x=>x.length>9)); inHead.innerHTML = w.join("<br>"); }
+  else { inHead.classList.remove("small"); inHead.innerHTML = STEPS[i].head; }
+}
+let flip = { from:0, to:0, t0:0, d:1 }, ang = 0;
+setHead(0); inCap.innerHTML = STEPS[0].cap;
+function setStep(i){
+  if(i === curStep) return; curStep = i;
+  const d = reduceMotion ? 1 : 720*clamp(Math.abs(STEPS[i].ry - ang)/180, .4, 2);
+  flip = { from: ang, to: STEPS[i].ry, t0: performance.now(), d };
+  setTimeout(()=>{ soft(inHead, ()=>setHead(i)); soft(inNum, ()=>inNum.textContent = "0"+(i+1)); soft(inCap, ()=>inCap.innerHTML = STEPS[i].cap); }, reduceMotion ? 0 : .38*Math.min(d,720));
+  $$("button", inIcons).forEach((b,k)=>b.classList.toggle("on", k===i));
+}
+$$("button", inIcons).forEach((b,k)=>{ b.addEventListener("click", ()=>scrollTo({ top: sec2.offsetTop + (sec2.offsetHeight - vh)*(k*.19 + .095), behavior: reduceMotion ? "auto":"smooth" })); });
+$$("button", inIcons)[0].classList.add("on");
+/* la tempête d'ingrédients : une seule vague, 20 morceaux */
+const SP = Array.from({length:20}, (_,i)=>{ const el = document.createElement("div"); el.className = "sp"; storm.appendChild(el);
+  let s = (i+1)*7919; const rnd = ()=> (s = (s*16807) % 2147483647)/2147483647;
+  return { el, a: rnd()*Math.PI*2, ph: i/20 + rnd()*.03, spin: (rnd()<.5?-1:1)*360, size: .7+rnd()*.7, own: rnd()<.7, k: Math.floor(rnd()*7), r2: Math.floor(rnd()*N) }; });
+let stormFor = -1;
+function stormFrame(q){
+  if(stormFor !== sel){ stormFor = sel; SP.forEach(sp=>{ const pid = sp.own ? PRODUCTS[sel].id : PRODUCTS[sp.r2].id; const [kind,...a] = PIECES[pid][sp.k]; sp.el.innerHTML = ART[kind](...a); }); }
+  const Rr = .55*Math.hypot(vw,vh), base = .085*Math.min(vw,vh)/100;
+  SP.forEach(sp=>{
+    const s = clamp((q - .45*sp.ph)/.55);
+    if(reduceMotion || q<=0 || q>=1 || s<=0 || s>=1){ sp.el.style.opacity = 0; return; }
+    const rad = (.06 + Math.pow(s,1.5)*.95)*Rr;
+    sp.el.style.opacity = (Math.sin(Math.PI*s)*clamp(5*q)*clamp(6*(1-q))).toFixed(3);
+    sp.el.style.transform = `translate(${vw/2 + Math.cos(sp.a)*rad}px,${vh/2 + Math.sin(sp.a)*rad*.8}px) rotate(${sp.spin*s}deg) scale(${(.2+1.7*s)*sp.size*base})`;
+  });
+}
+
+/* ======================== 3. LA COLLECTION ======================== */
+const cards = $("#cards");
+cards.innerHTML = PRODUCTS.map((p,i)=>`<article class="sc${i===sel?" live":""}" style="--c:${p.color};--fg:${textOn(p.color)}" data-i="${i}">
+  <h3 class="nm disp">${shortName(p)}</h3>
+  <div class="pk"><img src="${jarSrc(p)}" alt="${p.name}, pot de 250 g" loading="lazy"></div>
+  <span class="pr">${euro(p.price)}</span>
+  <button class="plus" aria-label="Ajouter un pot de ${p.name} au panier"><svg viewBox="0 0 16 16"><path d="M8 2v12M2 8h12"/></svg></button></article>`).join("");
+const cardEls = $$(".sc", cards), tilt = {};
+let squash = -1e9;
+cardEls.forEach(c=>{
+  const i = +c.dataset.i;
+  c.addEventListener("pointermove", e=>{ if(e.pointerType!=="mouse") return; const r = c.getBoundingClientRect(), x = (e.clientX-r.left)/r.width-.5, y = (e.clientY-r.top)/r.height-.5;
+    tilt[i] = {x,y}; c.style.transition = "transform .15s, box-shadow .15s"; c.style.transform = `translateY(-8px) rotateX(${-y*12}deg) rotateY(${x*12}deg)`; c.style.boxShadow = "0 24px 40px -18px rgba(40,30,20,.35)"; });
+  c.addEventListener("pointerleave", ()=>{ tilt[i] = {x:0,y:0}; c.style.transition = ""; c.style.transform = ""; c.style.boxShadow = ""; });
+  c.addEventListener("click", e=>{
+    if(e.target.closest(".plus")){ flyToCart([i===sel ? traveller.querySelector(".front img") : c.querySelector(".pk img")], ()=>Cart.add(PRODUCTS[i].id,1)); return; }
+    if(i===sel) squash = performance.now(); else location.href = `produit.html?p=${PRODUCTS[i].id}`;
+  });
+});
+function squashScale(now){ const t = (now - squash)/500; if(t<0||t>1) return [1,1];
+  const k = [[0,1,1],[.3,1.06,.93],[.6,.97,1.04],[1,1,1]]; let i = 0; while(k[i+1][0] < t) i++; const f = (t-k[i][0])/(k[i+1][0]-k[i][0]); return [lerp(k[i][1],k[i+1][1],f), lerp(k[i][2],k[i+1][2],f)]; }
+
+/* ======================== 4. LE TRIO ======================== */
+const slots = [null,null,null], slotEls = $$(".slot"), thumbs = $("#thumbs"), buy = $("#buy"), glow = $("#glow");
+let trioTouched = false;
+thumbs.innerHTML = PRODUCTS.map((p,i)=>`<button class="th" data-i="${i}" style="--c:${p.color}" aria-label="Ajouter ${p.name} au trio"><span class="sq"><img src="${jarSrc(p)}" alt=""></span><span>${shortName(p)}</span><em></em></button>`).join("");
+const trioPrice = ids => Math.round(ids.reduce((s,id)=>s+byId(id).price,0)*.9) - .10;
+function renderTrio(){
+  slotEls.forEach((el,k)=>{ const id = slots[k], img = el.querySelector("img"); el.classList.toggle("full", !!id);
+    if(id){ if(!img || img.dataset.id!==id){ if(img) img.remove(); el.insertAdjacentHTML("afterbegin", `<img src="${jarSrc(byId(id))}" alt="${byId(id).name}" data-id="${id}">`); } } else if(img) img.remove(); });
+  $$(".th", thumbs).forEach(b=>{ const n = slots.filter(x=>x===PRODUCTS[+b.dataset.i].id).length, em = b.querySelector("em"); em.classList.toggle("on", n>0); em.textContent = n>1 ? n : "✓"; });
+  const n = slots.filter(Boolean).length;
+  if(!buy.classList.contains("ok")){ buy.disabled = n<3; buy.innerHTML = n<3 ? `Choisissez encore ${3-n} miel${3-n>1?"s":""}` : `Ajouter le trio <small>${euro(trioPrice(slots))}</small>`; }
+}
+function pulse(color){ glow.style.setProperty("--g", hexA(color,.72)); glow.classList.add("p"); void glow.offsetWidth; glow.classList.remove("p"); }
+thumbs.addEventListener("click", e=>{ const b = e.target.closest(".th"); if(!b) return; trioTouched = true; const k = slots.indexOf(null); if(k<0) return; const p = PRODUCTS[+b.dataset.i]; slots[k] = p.id; pulse(p.color); renderTrio(); });
+slotEls.forEach((el,k)=>el.querySelector(".x").addEventListener("click", ()=>{ trioTouched = true; slots[k] = null; renderTrio(); }));
+buy.addEventListener("click", ()=>{
+  const ids = slots.slice(); if(ids.includes(null)) return; trioTouched = true;
+  flyToCart(slotEls.map(s=>s.querySelector("img")), ()=>Cart.addBundle("Coffret Trio", ids, trioPrice(ids)));
+  setTimeout(()=>{ slots.fill(null); renderTrio(); buy.classList.add("ok"); buy.disabled = false; buy.textContent = "Ajouté au panier";
+    setTimeout(()=>{ buy.classList.remove("ok"); renderTrio(); }, 1600); }, 60);
+});
+new IntersectionObserver(([en], ob)=>{ if(!en.isIntersecting) return; ob.disconnect(); if(trioTouched) return;
+  [0,1,2].forEach(k=>setTimeout(()=>{ if(trioTouched) return; const p = PRODUCTS[mod(sel+k)]; slots[k] = p.id; pulse(p.color); renderTrio(); }, 250+160*k)); }, { threshold:.3 }).observe($("#trio"));
+renderTrio();
+
+/* vol vers le panier */
+function flyToCart(imgs, done){
+  const cart = $("#cartBtn"), cr = cart.getBoundingClientRect(), tx = cr.left+cr.width/2, ty = cr.top+cr.height/2;
+  imgs = imgs.filter(Boolean);
+  if(reduceMotion || !imgs.length){ done(); return; }
+  imgs.forEach((src,i)=>{
+    const r = src.getBoundingClientRect(), f = document.createElement("img"); f.src = src.src; f.className = "fly"; f.alt = "";
+    Object.assign(f.style,{ left:r.left+"px", top:r.top+"px", width:r.width+"px", height:r.height+"px", objectFit:"contain" }); document.body.appendChild(f);
+    const dx = tx-(r.left+r.width/2), dy = ty-(r.top+r.height/2), k = Math.min(.2, 30/Math.max(1,r.height)), lift = Math.min(160, .35*Math.abs(dy)+60);
+    const a = f.animate([{transform:"none",opacity:1},{transform:`translate(${dx*.4}px,${dy*.4-lift}px) scale(${.45+k}) rotate(-10deg)`,opacity:1,offset:.45},{transform:`translate(${dx}px,${dy}px) scale(${k}) rotate(-18deg)`,opacity:.15}],{duration:900,delay:i*120,easing:"cubic-bezier(.5,0,.2,1)",fill:"forwards"});
+    a.onfinish = ()=>{ f.remove(); cart.classList.remove("bump"); void cart.offsetWidth; cart.classList.add("bump"); if(i===imgs.length-1) done(); };
+  });
+}
+
+/* ======================== LE POT VOYAGEUR + BOUCLE ======================== */
+const rectState = el => { const r = el.getBoundingClientRect(); return { x:r.left+r.width/2, y:r.top+r.height/2, h:r.height }; };
+let nudged = false;
+function frame(now){
+  if(tween){ const t = clamp((now - tween.t0)/tween.d); pos = lerp(tween.from, tween.to, tween.curve(t)); if(t>=1){ pos = tween.to; tween = null; } }
+  revealFrame(now);
+  hdr.style.top = Math.max(0, ann.offsetHeight - scrollY) + "px";
+
+  const s2 = sec2.getBoundingClientRect(), shop = cards.getBoundingClientRect();
+  const p1 = clamp(1 - s2.top/vh), p3 = clamp((vh - shop.top)/(.7*vh)), p2 = clamp(-s2.top/(s2.height - vh));
+  setStep(Math.floor(Math.min(p2,.759)/.19));
+  const q = clamp((p2 - .76)/.24);
+
+  // l'arc
+  const jT = Math.round(target), base = Math.floor(pos), fade = 1 - clamp(1.6*p1);
+  pool.forEach((el,i)=>{ const j = base - 5 + i; if(j===jT || fade<=0){ place(el,{op:0}); return; }
+    setJar(el, PRODUCTS[mod(j)]); const s = arcState(j-pos, now, j); s.op *= fade; place(el, s); });
+
+  // le voyageur : arc → étiquette → carte
+  setJar(traveller, PRODUCTS[mod(jT)]);
+  let st = arcState(jT - pos, now, jT);
+  const ft = clamp((now - flip.t0)/flip.d); ang = lerp(flip.from, flip.to, reduceMotion ? 1 : sine(ft));
+  if(p1 > 0){
+    const b = rectState(inBar), bob = reduceMotion ? 0 : Math.sin(now/2600*2*Math.PI)*6;
+    const B = { x:b.x, y:b.y + bob, h:b.h, rz:10, ry: ang + (reduceMotion ? 0 : 720*q), z:0, op:1 };
+    const e1 = ioe(p1);
+    st = { x:lerp(st.x,B.x,e1), y:lerp(st.y,B.y,e1), h:lerp(st.h,B.h,e1), rz:lerp(st.rz,B.rz,e1), ry:lerp(st.ry,B.ry,e1), rx:0, z:lerp(st.z,0,e1), op:lerp(st.op,1,e1) };
+    if(p3 > 0){
+      const card = cardEls[mod(jT)], c = rectState(card.querySelector(".pk")), tl = tilt[mod(jT)] || {x:0,y:0}, sq = squashScale(now);
+      const C = { x:c.x, y:c.y, h:c.h, rz:0, ry: Math.round(B.ry/360)*360 + tl.x*14, rx: -tl.y*14, z:30 };
+      const e3 = ioe(p3);
+      st = { x:lerp(st.x,C.x,e3), y:lerp(st.y,C.y,e3), h:lerp(st.h,C.h,e3), rz:lerp(st.rz,C.rz,e3), ry:lerp(st.ry,C.ry,e3), rx:lerp(0,C.rx,e3), z:lerp(st.z,C.z,e3), op:1, sx:sq[0], sy:sq[1] };
+      if(phone && !nudged){ nudged = true; cards.scrollTo({ left: card.offsetLeft - (cards.clientWidth - card.offsetWidth)/2, behavior: reduceMotion ? "auto" : "smooth" }); }
+    }
+  }
+  place(traveller, st);
+
+  // tempête
+  inDark.style.opacity = (clamp(3.5*q)*.42).toFixed(3);
+  const fq = String(1 - clamp(4*q)); inHead.style.opacity = inCap.style.opacity = inIcons.style.opacity = inNum.style.opacity = fq;
+  stormFrame(q);
+
+  // en-tête transparent sur les sections de couleur
+  const onColor = hero.getBoundingClientRect().bottom > 70 || (s2.top < 70 && s2.bottom > 70);
+  hdr.classList.toggle("clear", onColor);
+  hdr.style.color = onColor ? textOn(PRODUCTS[sel].color) : "";
+  requestAnimationFrame(frame);
+}
+
+/* ======================== MISE EN PAGE ======================== */
+function layout(){
+  vw = innerWidth; vh = innerHeight; phone = vw < 820;
+  R.style.setProperty("--w", (vw/1440) + "px");
+  R.style.setProperty("--ann-h", ann.offsetHeight + "px"); R.style.setProperty("--hdr-h", hdr.offsetHeight + "px");
+  heroLayout();
+  fr2.style.setProperty("--k", phone ? Math.min(vw/390, vh/780) : Math.min(vw/1440, vh/900));
+  fitTitle(PRODUCTS[sel]);
+}
+addEventListener("resize", layout); layout();
+
+/* apparitions */
+const io = new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } }), { threshold:.18 });
+[$("#shHead"), $("#shCap"), $("#trHead")].forEach(el=>io.observe(el));
+const cio = new IntersectionObserver(es=>{ if(es.some(en=>en.isIntersecting)){ cardEls.forEach((c,i)=>setTimeout(()=>c.classList.add("in"), i*80)); cio.disconnect(); } }, { threshold:.1 });
+cio.observe(cards);
+$("#newsForm").addEventListener("submit", e=>{ e.preventDefault(); const v = $("#newsMail").value.trim(), ok = $("#newsOk"); ok.hidden = false;
+  ok.textContent = /.+@.+\..+/.test(v) ? "Merci, vous recevrez nos nouveautés." : "Entrez une adresse email complète, par exemple prenom@exemple.fr."; });
+
+/* entrée : les pots arrivent de la droite et se posent sur l'arc */
+title.innerHTML = titleHTML(PRODUCTS[0]); title.setAttribute("aria-label", PRODUCTS[0].name);
+count.textContent = "01"; setBits(PRODUCTS[0]);
+hero.style.setProperty("--tx", textOn(PRODUCTS[0].color)==="#111111" ? "#111111" : "#ffffff");
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(()=>{
+  layout();
+  if(reduceMotion) pos = 0; else tween = { from:-2.6, to:0, t0:performance.now(), d:1700, curve:entrance };
+  $$(".fadein").forEach((el,i)=>setTimeout(()=>el.classList.add("in"), reduceMotion ? 0 : 500 + i*120));
+  touch();
+});
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
