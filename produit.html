@@ -6,7 +6,7 @@
 <title>KŌMI — Miel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Lato:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/komi.css?v=1794982692">
+<link rel="stylesheet" href="assets/komi.css?v=1794982795">
 <style>
 /* ===== Fiche produit (templates/product.json) : structure orientée vente, traitement épuré et premium ===== */
 .crumbs{font-size:.82rem;color:var(--ink-soft);padding-block:18px 10px}
@@ -70,10 +70,14 @@
 .offer .dot{width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 1.5px rgba(17,17,17,.35)}
 .offer.on{box-shadow:inset 0 0 0 2px var(--black)}
 .offer.on .dot{box-shadow:inset 0 0 0 6px var(--black)}
-.offer .vis{height:64px;border-radius:14px;background:var(--c);display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
-.offer .vis img{width:62%}
+.offer .vis{position:relative;height:64px;border-radius:14px;background:var(--c);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.offer .vis img{height:84%;width:auto;filter:drop-shadow(0 3px 4px rgba(0,0,0,.18))}
 .offer .vis.trio{background:linear-gradient(150deg,#FF7900,#EF2970)}
-.offer .vis.trio img{width:34%;margin:0 -4%}
+.offer .vis.trio img{position:absolute;left:50%;top:50%;height:56%}
+.offer .vis.trio img:nth-child(1){z-index:2;height:74%;transform:translate(-50%,-42%)}
+.offer .vis.trio img:nth-child(2){transform:translate(-112%,-64%)}
+.offer .vis.trio img:nth-child(3){transform:translate(12%,-64%)}
+.offer .nw{white-space:nowrap}
 .offer b{display:block;font-family:var(--title);font-size:.98rem}
 .offer small{color:var(--ink-soft);font-size:.82rem}
 .offer .pr{text-align:right;font-family:var(--title);font-weight:600;font-variant-numeric:tabular-nums}
@@ -214,7 +218,7 @@ details p{margin:0 0 16px;color:var(--ink-soft);max-width:56ch}
   </div>
 </footer>
 
-<script src="assets/komi.js?v=1794982692"></script>
+<script src="assets/komi.js?v=1794982795"></script>
 <script>
 /* Offre coffret : à confirmer par le client (ici, exemple à −10 %) */
 const TRIO = { size:3, discount:.10, name:"Coffret Trio" };
@@ -287,8 +291,8 @@ function render(){
               <span><b>1 pot · 250 g</b><small>${P.name}</small></span>
               <span class="pr">${euro(unit)}</span></label>
             <label class="offer ${offer==="trio"?"on":""}" data-offer="trio"><input type="radio" name="offer" ${offer==="trio"?"checked":""}><span class="dot"></span><span class="badge">Le plus offert</span>
-              <span class="vis trio">${trioJars.map(j=>`<img src="${jarSrc(j)}" alt="">`).join("")}</span>
-              <span><b>Coffret Trio · 3 × 250 g</b><small>3 miels au choix, boîte KŌMI</small></span>
+              <span class="vis trio">${[P,...trioJars.filter(j=>j&&j.id!==P.id)].slice(0,3).map(j=>`<img src="${jarSrc(j)}" alt="">`).join("")}</span>
+              <span><b>Coffret Trio</b><small>3 pots de 250 g au choix</small></span>
               <span class="pr">${euro(trioPrice)}<s>${euro(trioBase)}</s></span></label>
           </div>
         </div>
