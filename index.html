@@ -7,7 +7,7 @@
 <meta name="description" content="KŌMI, des miels premium accessibles. Dix références, une couleur par miel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Lato:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/komi.css?v=1794983387">
+<link rel="stylesheet" href="assets/komi.css?v=1794983621">
 <style>
 /* ===== Section « slider des miels » (sections/komi-hero-slider.liquid) =====
    Une couleur pleine par miel, le nom en géant derrière le pot, les ingrédients qui flottent.
@@ -108,6 +108,21 @@
 .news input{flex:1;min-width:0;border:0;border-radius:999px;padding:15px 20px;font:inherit;color:var(--black);background:var(--white)}
 .news .ok{grid-column:1/-1;margin:0;font-family:var(--title);font-weight:600;position:relative}
 @media (max-width:760px){.news{grid-template-columns:1fr}.news form{flex-direction:column}.news form .btn{width:100%}}
+
+/* boutique : fond coloré animé */
+#boutique{position:relative;isolation:isolate;overflow:hidden;background:#FFF4EA}
+#boutique .bbg{position:absolute;inset:0;z-index:-1;filter:blur(70px);pointer-events:none}
+#boutique .bbg i{position:absolute;border-radius:50%;will-change:transform}
+#boutique .bbg i:nth-child(1){width:70vmax;aspect-ratio:1;left:-25vmax;top:-20vmax;background:#F6A6BD;opacity:.75;animation:ba 16s ease-in-out infinite alternate}
+#boutique .bbg i:nth-child(2){width:55vmax;aspect-ratio:1;right:-20vmax;top:5%;background:#FFB36B;opacity:.7;animation:bb 19s ease-in-out infinite alternate}
+#boutique .bbg i:nth-child(3){width:50vmax;aspect-ratio:1;left:-15vmax;top:35%;background:#FF7900;opacity:.35;animation:bc 14s ease-in-out infinite alternate}
+#boutique .bbg i:nth-child(4){width:48vmax;aspect-ratio:1;right:-18vmax;top:50%;background:#EF2970;opacity:.35;animation:ba 21s ease-in-out infinite alternate-reverse}
+#boutique .bbg i:nth-child(5){width:56vmax;aspect-ratio:1;left:10%;bottom:-22vmax;background:#F6BD21;opacity:.45;animation:bb 17s ease-in-out infinite alternate-reverse}
+#boutique .bbg i:nth-child(6){width:40vmax;aspect-ratio:1;right:5%;bottom:5%;background:#9D38A8;opacity:.22;animation:bc 23s ease-in-out infinite alternate}
+@keyframes ba{to{transform:translate(12vmax,10vmax) scale(1.15)}}
+@keyframes bb{to{transform:translate(-12vmax,12vmax) scale(.9)}}
+@keyframes bc{to{transform:translate(10vmax,-10vmax) scale(1.2)}}
+@media (prefers-reduced-motion:reduce){#boutique .bbg i{animation:none}}
 </style>
 </head>
 <body data-page="home">
@@ -147,6 +162,7 @@
 
 <!-- BOUTIQUE -->
 <section class="block" id="boutique">
+  <div class="bbg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="wrap">
     <div class="head">
       <div><p class="eyebrow" style="color:var(--fuchsia)">La boutique</p><h2>Toute la collection</h2><p>Dix références en pot de verre de 250 g, couvercle doré satiné.</p></div>
@@ -243,7 +259,7 @@
   </div>
 </footer>
 
-<script src="assets/komi.js?v=1794983387"></script>
+<script src="assets/komi.js?v=1794983621"></script>
 <script>
 /* ======================== ACCUEIL ======================== */
 const clamp = (v,a=0,b=1) => Math.min(b,Math.max(a,v));
