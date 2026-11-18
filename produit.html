@@ -6,7 +6,7 @@
 <title>KŌMI — Miel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Lato:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/komi.css?v=1794982569">
+<link rel="stylesheet" href="assets/komi.css?v=1794982692">
 <style>
 /* ===== Fiche produit (templates/product.json) : structure orientée vente, traitement épuré et premium ===== */
 .crumbs{font-size:.82rem;color:var(--ink-soft);padding-block:18px 10px}
@@ -21,7 +21,7 @@
 .thumbs img{width:62%}
 .slides{display:grid;grid-auto-flow:column;grid-auto-columns:100%;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:var(--r);scrollbar-width:none}
 .slides::-webkit-scrollbar{display:none}
-.slide{scroll-snap-align:start;aspect-ratio:4/4.6;position:relative;display:grid;place-items:center;overflow:hidden;border-radius:var(--r)}
+.slide{scroll-snap-align:start;aspect-ratio:4/4.6;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:var(--r)}
 .s-color{background:var(--c)}
 .s-color::before{content:"";position:absolute;width:115%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.2);left:-52%;top:-48%}
 .s-color::after{content:"";position:absolute;width:62%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.14);right:-20%;bottom:-16%}
@@ -32,7 +32,7 @@
 .s-brand{background:linear-gradient(150deg,#FF7900 0%,#F5507A 65%,#EF2970 100%)}
 .s-brand::before{content:"";position:absolute;width:90%;aspect-ratio:1;border-radius:50%;background:var(--powder);opacity:.55;left:-30%;bottom:-40%}
 .s-brand img{position:relative;width:46%;filter:drop-shadow(0 34px 34px rgba(80,0,20,.35))}
-.s-trio{background:var(--white);align-items:end;padding-bottom:12%}
+.s-trio{display:grid;justify-items:center;background:var(--white);align-items:end;padding-bottom:12%}
 .s-trio .row3{display:flex;align-items:flex-end;justify-content:center;width:86%}
 .s-trio img{width:34%;margin:0 -2%;filter:drop-shadow(0 22px 22px rgba(0,0,0,.18))}
 .s-trio img:nth-child(2){width:40%;position:relative;z-index:1}
@@ -214,7 +214,7 @@ details p{margin:0 0 16px;color:var(--ink-soft);max-width:56ch}
   </div>
 </footer>
 
-<script src="assets/komi.js?v=1794982569"></script>
+<script src="assets/komi.js?v=1794982692"></script>
 <script>
 /* Offre coffret : à confirmer par le client (ici, exemple à −10 %) */
 const TRIO = { size:3, discount:.10, name:"Coffret Trio" };
