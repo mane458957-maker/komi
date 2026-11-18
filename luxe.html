@@ -7,7 +7,7 @@
 <meta name="description" content="KŌMI, des miels premium accessibles. Dix références, une couleur par miel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Lato:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/komi.css?v=1794983181">
+<link rel="stylesheet" href="assets/komi.css?v=1794983387">
 <style>
 /* Version « luxe » : beaucoup de blanc et de crème, la couleur n'arrive que par touches, typographie fine. */
 :root{--line:rgba(17,17,17,.1);--soft:#F3EEE6}
@@ -127,6 +127,7 @@ section.s{padding-block:clamp(64px,8vw,110px)}
 .compo .vis .drip{position:absolute;left:58%;top:0;width:3.2%;height:44%;border-radius:0 0 40px 40px;background:linear-gradient(90deg,#C9801E,#F2B655 45%,#D18A26);animation:drip 4s ease-in-out infinite}
 @keyframes drip{50%{height:52%}}
 .compo .vis img{position:absolute;bottom:6%;left:50%;width:40%;transform:translateX(-50%);filter:drop-shadow(0 26px 24px rgba(60,30,10,.25))}
+.compo .vis img.photo{inset:0;left:0;bottom:0;width:100%;height:100%;object-fit:cover;object-position:60% 75%;transform:none;filter:none}
 .compo h3{font-family:var(--title);font-weight:500;font-size:clamp(1.6rem,3vw,2.4rem);line-height:1.15;margin:0 0 18px}
 .compo p{margin:0 0 14px;color:var(--ink-soft);font-size:1.06rem;line-height:1.7;max-width:48ch}
 .compo p b{color:var(--black)}
@@ -265,7 +266,7 @@ section.s{padding-block:clamp(64px,8vw,110px)}
 
 <section class="s" id="composition" style="padding-top:0">
   <div class="wrap compo">
-    <div class="vis rv"><span class="drip"></span><img src="img/jar-romarin.webp" alt="Miel de Romarin KŌMI" loading="lazy"></div>
+    <div class="vis rv"><img class="photo" src="img/composition-miel.webp" alt="Cuillère à miel tenue à la main, miel qui coule" loading="lazy"></div>
     <div class="rv">
       <h2 class="big" style="margin-bottom:22px">Une composition<br>simple</h2>
       <h3>Du miel, des plantes, rien d'autre</h3>
@@ -314,7 +315,7 @@ section.s{padding-block:clamp(64px,8vw,110px)}
   </div>
 </footer>
 
-<script src="assets/komi.js?v=1794983181"></script>
+<script src="assets/komi.js?v=1794983387"></script>
 <script>
 const P = id => byId(id);
 const short = p => p.name.replace(/^Miel (d'|de )/,"");
