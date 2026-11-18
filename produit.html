@@ -6,7 +6,7 @@
 <title>KŌMI — Miel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Lato:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/komi.css?v=1794984321">
+<link rel="stylesheet" href="assets/komi.css?v=1794984626">
 <style>
 /* ===== Fiche produit (templates/product.json) : structure orientée vente, traitement épuré et premium ===== */
 .crumbs{font-size:.82rem;color:var(--ink-soft);padding-block:18px 10px}
@@ -115,6 +115,12 @@ details p{margin:0 0 16px;color:var(--ink-soft);max-width:56ch}
 
 /* sections sous la ligne de flottaison */
 .band{background:var(--c);color:var(--fg);position:relative;overflow:hidden}
+.band .wv{position:absolute;left:0;right:0;z-index:2;height:clamp(30px,5vw,70px);background:var(--cream);pointer-events:none;-webkit-mask-repeat:repeat-x;mask-repeat:repeat-x;-webkit-mask-size:var(--ww) 100%;mask-size:var(--ww) 100%;animation:waveX 16s linear infinite;--ww:900px}
+.band .wv.t{top:-1px;-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 80' preserveAspectRatio='none'%3E%3Cpath d='M0 0H720V36C600 0 480 0 360 36S120 72 0 36Z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 80' preserveAspectRatio='none'%3E%3Cpath d='M0 0H720V36C600 0 480 0 360 36S120 72 0 36Z'/%3E%3C/svg%3E");animation-direction:reverse}
+.band .wv.b{bottom:-1px;-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 80' preserveAspectRatio='none'%3E%3Cpath d='M0 44C120 8 240 8 360 44S600 80 720 44V80H0Z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 80' preserveAspectRatio='none'%3E%3Cpath d='M0 44C120 8 240 8 360 44S600 80 720 44V80H0Z'/%3E%3C/svg%3E")}
+@keyframes waveX{to{-webkit-mask-position:var(--ww) 0;mask-position:var(--ww) 0}}
+@media (max-width:760px){.band .wv{--ww:460px}}
+@media (prefers-reduced-motion:reduce){.band .wv{animation:none}}
 .band::before{content:"";position:absolute;width:60vmax;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.14);right:-20vmax;top:-26vmax}
 .band .wrap{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding-block:100px}
 .band h2{font-size:clamp(2.2rem,5vw,4rem);margin:12px 0 20px}
@@ -218,7 +224,7 @@ details p{margin:0 0 16px;color:var(--ink-soft);max-width:56ch}
   </div>
 </footer>
 
-<script src="assets/komi.js?v=1794984321"></script>
+<script src="assets/komi.js?v=1794984626"></script>
 <script>
 /* Offre coffret : à confirmer par le client (ici, exemple à −10 %) */
 const TRIO = { size:3, discount:.10, name:"Coffret Trio" };
@@ -319,7 +325,7 @@ function render(){
     </div>
   </div>
 
-  <section class="band">
+  <section class="band"><i class="wv t" aria-hidden="true"></i><i class="wv b" aria-hidden="true"></i>
     <div class="wrap">
       <div class="reveal"><p class="eyebrow">Notes de dégustation</p><h2>${P.tagline}.</h2><p>${P.text}</p></div>
       <div class="profile reveal">

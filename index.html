@@ -7,12 +7,12 @@
 <meta name="description" content="KŌMI, des miels premium accessibles. Dix références, une couleur par miel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Lato:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/komi.css?v=1794984321">
+<link rel="stylesheet" href="assets/komi.css?v=1794984626">
 <style>
 /* ===== Section « slider des miels » (sections/komi-hero-slider.liquid) =====
    Une couleur pleine par miel, le nom en géant derrière le pot, les ingrédients qui flottent.
    Tout est dessiné sur un cadre de 1440 × 900 mis à l'échelle (--u). */
-#heroScroll{position:relative;height:calc(var(--steps,10) * 70vh + 100vh)}
+#heroScroll{position:relative}
 #hero{position:sticky;top:0;height:100vh;height:100svh;min-height:560px;overflow:hidden;background:#F59A23;user-select:none;-webkit-user-select:none;touch-action:pan-y}
 .slide{position:absolute;inset:0;overflow:hidden;visibility:hidden}
 .slide.cur{visibility:visible;z-index:2}
@@ -121,22 +121,16 @@
 @media (prefers-reduced-motion:reduce){#boutique .flo span{animation:none}}
 
 /* vagues entre les sections */
-:root{--wh:clamp(34px,6vw,80px);--ww:900px}
+:root{--wh:clamp(34px,6vw,80px);--ww:900px;--wdn:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 80' preserveAspectRatio='none'%3E%3Cpath d='M0 0H720V36C600 0 480 0 360 36S120 72 0 36Z'/%3E%3C/svg%3E")}
 @media (max-width:760px){:root{--ww:460px;--wh:30px}}
 .wave-up{position:relative;z-index:2}
 .wave-up::before,.wave-in::after{content:"";position:absolute;left:0;right:0;height:var(--wh);pointer-events:none;-webkit-mask-repeat:repeat-x;mask-repeat:repeat-x;-webkit-mask-size:var(--ww) 100%;mask-size:var(--ww) 100%;animation:waveX 16s linear infinite}
 .wave-up::before{top:calc(1px - var(--wh));background:var(--cream);-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 80' preserveAspectRatio='none'%3E%3Cpath d='M0 44C120 8 240 8 360 44S600 80 720 44V80H0Z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 80' preserveAspectRatio='none'%3E%3Cpath d='M0 44C120 8 240 8 360 44S600 80 720 44V80H0Z'/%3E%3C/svg%3E")}
+.wave-hero::after{content:"";position:absolute;left:0;right:0;height:var(--wh);pointer-events:none;-webkit-mask-repeat:repeat-x;mask-repeat:repeat-x;-webkit-mask-size:var(--ww) 100%;mask-size:var(--ww) 100%;animation:waveX 16s linear infinite reverse;top:-1px;z-index:3;background:var(--hc,#F59A23);-webkit-mask-image:var(--wdn);mask-image:var(--wdn)}
 .wave-in::after{top:-1px;z-index:3;background:var(--cream);-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 80' preserveAspectRatio='none'%3E%3Cpath d='M0 0H720V36C600 0 480 0 360 36S120 72 0 36Z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 80' preserveAspectRatio='none'%3E%3Cpath d='M0 0H720V36C600 0 480 0 360 36S120 72 0 36Z'/%3E%3C/svg%3E");animation-direction:reverse}
 @keyframes waveX{to{-webkit-mask-position:var(--ww) 0;mask-position:var(--ww) 0}}
 @media (prefers-reduced-motion:reduce){.wave-up::before,.wave-in::after{animation:none}}
 
-/* mobile : le scroll s'arrête sur chaque miel */
-.snap{position:absolute;left:0;width:1px;height:1px;pointer-events:none}
-@media (pointer:coarse){
-  html{scroll-snap-type:y proximity}
-  .snap{scroll-snap-align:start;scroll-snap-stop:always}
-  #boutique{scroll-snap-align:start;scroll-margin-top:0}
-}
 </style>
 </head>
 <body data-page="home">
@@ -165,7 +159,6 @@
     <div class="tabs rise" id="tabs" role="tablist" aria-label="Choisir un miel"><span class="uline" id="uline"></span></div>
     <div class="cnt rise" id="cnt">01 / 10</div>
     <div class="minfo rise" id="minfo"><b></b><span></span></div>
-    <span class="scue rise" id="scue">Faites défiler</span>
     <a class="shop rise" id="shop" href="produit.html?p=oranger">Découvrir</a>
     <button class="arr prev rise" id="prev" aria-label="Miel précédent"><svg viewBox="0 0 28 28"><path d="M24 14H4M12 6l-8 8 8 8"/></svg></button>
     <button class="arr next rise" id="next" aria-label="Miel suivant"><svg viewBox="0 0 28 28"><path d="M4 14h20M16 6l8 8-8 8"/></svg></button>
@@ -175,7 +168,7 @@
 
 
 <!-- BOUTIQUE -->
-<section class="block wave-up" id="boutique">
+<section class="block wave-hero" id="boutique">
   <div class="flo" id="flo" aria-hidden="true"></div>
   <div class="wrap">
     <div class="head">
@@ -273,7 +266,7 @@
   </div>
 </footer>
 
-<script src="assets/komi.js?v=1794984321"></script>
+<script src="assets/komi.js?v=1794984626"></script>
 <script>
 /* ======================== ACCUEIL ======================== */
 const clamp = (v,a=0,b=1) => Math.min(b,Math.max(a,v));
@@ -387,6 +380,7 @@ const DUR = matchMedia("(pointer:coarse)").matches ? 720 : 970;
 function setUI(i){
   tabBtns.forEach((b,k)=>b.setAttribute("aria-current", String(k===i)));
   moveLine(i);
+  $("#boutique").style.setProperty("--hc", PRODUCTS[i].color);
   $("#cnt").textContent = `${String(i+1).padStart(2,"0")} / ${N}`;
   $("#minfo b").textContent = PRODUCTS[i].name; $("#minfo span").textContent = `${PRODUCTS[i].ing} · ${euro(PRODUCTS[i].price)}`;
   const s = $("#shop"); s.href = `produit.html?p=${PRODUCTS[i].id}`; s.setAttribute("aria-label", `Découvrir le ${PRODUCTS[i].name}`);
@@ -414,32 +408,38 @@ function goTo(j, dir){
 /* ---------- commandes ---------- */
 let lastAct = 0; const touch = () => lastAct = performance.now();
 /* le scroll pilote le slider : chaque tranche de 70 % d'écran = un miel */
-const heroScroll = $("#heroScroll"); heroScroll.style.setProperty("--steps", N);
-/* points d'arrêt : un par miel (au centre de sa tranche), aligné sur scrollToSlide */
-function placeSnaps(){
-  $$(".snap", heroScroll).forEach(e=>e.remove());
-  const span = heroScroll.offsetHeight - innerHeight;
-  let h = '<i class="snap" style="top:0"></i>';
-  for(let j=0;j<N;j++) h += `<i class="snap" style="top:${Math.round(span*(j+.5)/N)}px"></i>`;
-  heroScroll.insertAdjacentHTML("afterbegin", h);
-}
-placeSnaps(); addEventListener("resize", placeSnaps);
-const wanted = () => { const r = heroScroll.getBoundingClientRect(), p = clamp(-r.top / (r.height - innerHeight)); return Math.min(N-1, Math.floor(p*N)); };
-function scrollToSlide(j){
-  if(j < 0) j = 0;
-  const top = j >= N ? heroScroll.offsetTop + heroScroll.offsetHeight - innerHeight + 2 : heroScroll.offsetTop + (heroScroll.offsetHeight - innerHeight) * (j + .5) / N;
-  scrollTo({ top, behavior: reduceMotion ? "auto" : "smooth" });
-}
-(function follow(){ if(!busy){ const w = wanted(); if(w !== cur) goTo(w, w > cur ? 1 : -1); } requestAnimationFrame(follow); })();
-const next = () => scrollToSlide(wanted() + 1), prev = () => scrollToSlide(wanted() - 1);
+const heroScroll = $("#heroScroll");
+/* carrousel automatique : défile tout seul, on change de miel au glissé gauche/droite, aux flèches ou aux onglets */
+heroScroll.style.setProperty("--steps", 0);
+let pend = null, pendDir = 1;
+(function follow(){
+  if(!busy && pend !== null){ const t = pend; pend = null; if(t !== cur) goTo(t, pendDir); }
+  requestAnimationFrame(follow);
+})();
+const AUTO = 4500, IDLE = 7000;
+setInterval(()=>{
+  if(document.hidden || busy || reduceMotion) return;
+  if(performance.now() - lastAct < IDLE) return;
+  const r = hero.getBoundingClientRect(); if(r.bottom < innerHeight * .4 || r.top > innerHeight * .6) return;
+  go(cur + 1, 1);
+}, AUTO);
+const go = (j, dir) => { j = (j + N) % N; if(busy){ pend = j; pendDir = dir; return; } goTo(j, dir); };
+const next = () => go(cur + 1, 1), prev = () => go(cur - 1, -1);
 $("#next").addEventListener("click", ()=>{ touch(); next(); });
 $("#prev").addEventListener("click", ()=>{ touch(); prev(); });
-tabBtns.forEach(b=>b.addEventListener("click", ()=>{ touch(); scrollToSlide(+b.dataset.i); }));
+tabBtns.forEach(b=>b.addEventListener("click", ()=>{ touch(); const i = +b.dataset.i; go(i, i > cur ? 1 : -1); }));
 
 addEventListener("keydown", e=>{ if(hero.getBoundingClientRect().bottom < 100) return; if(e.key==="ArrowRight"){ touch(); next(); } if(e.key==="ArrowLeft"){ touch(); prev(); } });
+/* glisser de droite à gauche (doigt ou souris) */
 let sx = null, sy = 0;
-hero.addEventListener("pointerdown", e=>{ if(e.target.closest("a,button")) return; sx = e.clientX; sy = e.clientY; });
-addEventListener("pointerup", e=>{ if(sx===null) return; const dx = e.clientX - sx, dy = e.clientY - sy; sx = null; if(Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)){ touch(); dx < 0 ? next() : prev(); } });
+hero.addEventListener("touchstart", e=>{ if(e.target.closest("a,button")) return; sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, {passive:true});
+hero.addEventListener("touchend", e=>{ if(sx===null) return; const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy; sx = null; if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)*1.2){ touch(); dx < 0 ? next() : prev(); } }, {passive:true});
+let mx = null, my = 0;
+hero.addEventListener("pointerdown", e=>{ if(e.pointerType==="touch" || e.target.closest("a,button")) return; mx = e.clientX; my = e.clientY; });
+addEventListener("pointerup", e=>{ if(mx===null) return; const dx = e.clientX - mx, dy = e.clientY - my; mx = null; if(Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)){ touch(); dx < 0 ? next() : prev(); } });
+/* pavé tactile : glissé horizontal à deux doigts */
+let wAcc = 0, wLock = 0;
+hero.addEventListener("wheel", e=>{ if(Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return; e.preventDefault(); if(performance.now() < wLock) return; wAcc += e.deltaX; if(Math.abs(wAcc) > 60){ wAcc > 0 ? next() : prev(); wAcc = 0; wLock = performance.now() + 700; } }, {passive:false});
 
 
 /* ---------- ouverture ---------- */
