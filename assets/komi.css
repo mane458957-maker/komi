@@ -152,7 +152,7 @@ body[data-page="home"] .hdr{position:fixed;left:0;right:0;top:0}
 .drawer .dh{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line)}
 .drawer .dh h2{font-size:1.25rem}
 .lines{flex:1;overflow:auto;padding:8px 20px}
-.line{display:grid;grid-template-columns:76px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.lines .line{display:grid;grid-template-columns:76px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
 .line .th{width:76px;height:86px;border-radius:14px;background:var(--c);display:grid;place-items:end center;overflow:hidden}
 .line .th img{width:70%}
 .line .th.stack{display:flex;align-items:flex-end;justify-content:center;background:linear-gradient(150deg,#FF7900,#EF2970)}
