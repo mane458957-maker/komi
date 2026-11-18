@@ -14,14 +14,14 @@ const PRODUCTS = [
     text:"Frais et balsamique, avec une finale légèrement mentholée.", tagline:"Frais et balsamique", tags:["Frais", "Balsamique", "Ambré"], profile:{douceur:3,intensite:4,floral:2}, pairings:["Infusion", "Citron chaud", "Pain de seigle"], fx:["leaf","blossom"] },
   { id:"lavande",     name:"Miel de Lavande",   fam:"mono", ing:"Lavande · Espagne",         price:14.90, color:"#F6BD21",
     text:"Fin et floral, avec le parfum des champs de lavande en été.", tagline:"Fin et parfumé", tags:["Floral", "Fin", "Crémeux"], profile:{douceur:4,intensite:2,floral:5}, pairings:["Fromage blanc", "Madeleines", "Fruits rouges"], fx:["tiny","drop"] },
-  { id:"energie",     name:"Énergie",           fam:"infu", ing:"Miel, gingembre & citron",  price:16.90, color:"#E93F62",
-    text:"Un miel vif et pétillant, relevé de gingembre et d'un zeste de citron.", tagline:"Vif, épicé et zesté", tags:["Épicé", "Zesté", "Vif"], profile:{douceur:3,intensite:4,floral:1}, pairings:["Eau chaude citronnée", "Smoothie", "Marinade"], fx:["slice","drop"] },
-  { id:"respiration", name:"Respiration",       fam:"infu", ing:"Miel, propolis & thym",     price:16.90, color:"#2859B8",
-    text:"Un miel aromatique, avec la propolis et le thym des collines.", tagline:"Aromatique et résineux", tags:["Aromatique", "Résineux", "Herbacé"], profile:{douceur:3,intensite:4,floral:2}, pairings:["Infusion de thym", "Tisane du soir", "Tartine"], fx:["blossom","tiny"] },
-  { id:"digestion",   name:"Digestion",         fam:"infu", ing:"Miel, fenouil & anis",      price:16.90, color:"#A7BA32",
-    text:"Un miel doux aux notes anisées du fenouil et de l'anis vert.", tagline:"Doux et anisé", tags:["Anisé", "Doux", "Rond"], profile:{douceur:4,intensite:3,floral:2}, pairings:["Fin de repas", "Tisane", "Yaourt"], fx:["seed","blossom"] },
-  { id:"relaxation",  name:"Relaxation",        fam:"infu", ing:"Miel, safran & verveine",   price:16.90, color:"#9D38A8",
-    text:"Un miel floral, avec quelques pistils de safran et la douceur de la verveine.", tagline:"Floral et velouté", tags:["Floral", "Velouté", "Safrané"], profile:{douceur:4,intensite:3,floral:4}, pairings:["Lait chaud", "Tisane du soir", "Riz au lait"], fx:["thread","blossom"] },
+  { id:"energie",     name:"Énergie",           fam:"infu", ing:"Miel, ginseng, pollen & goji",  price:16.90, color:"#E93F62",
+    text:"Un miel gourmand et intense, associé au ginseng, au pollen et aux baies de goji.", tagline:"Vif, épicé et zesté", tags:["Épicé", "Zesté", "Vif"], profile:{douceur:3,intensite:4,floral:1}, pairings:["Eau chaude citronnée", "Smoothie", "Marinade"], fx:["slice","drop"] },
+  { id:"respiration", name:"Respiration",       fam:"infu", ing:"Miel, eucalyptus, menthe & thym",     price:16.90, color:"#2859B8",
+    text:"Un miel aromatique et frais, aux notes d'eucalyptus, de menthe et de thym.", tagline:"Aromatique et résineux", tags:["Aromatique", "Résineux", "Herbacé"], profile:{douceur:3,intensite:4,floral:2}, pairings:["Infusion de thym", "Tisane du soir", "Tartine"], fx:["blossom","tiny"] },
+  { id:"digestion",   name:"Digestion",         fam:"infu", ing:"Miel, gingembre, menthe & fenouil",      price:16.90, color:"#A7BA32",
+    text:"Un miel doux et épicé, avec le gingembre, la menthe et la graine de fenouil.", tagline:"Doux et anisé", tags:["Anisé", "Doux", "Rond"], profile:{douceur:4,intensite:3,floral:2}, pairings:["Fin de repas", "Tisane", "Yaourt"], fx:["seed","blossom"] },
+  { id:"relaxation",  name:"Relaxation",        fam:"infu", ing:"Miel, lavande, camomille & passiflore",   price:16.90, color:"#9D38A8",
+    text:"Un miel floral et rond, avec la lavande, la camomille et la fleur de passiflore.", tagline:"Floral et velouté", tags:["Floral", "Velouté", "Safrané"], profile:{douceur:4,intensite:3,floral:4}, pairings:["Lait chaud", "Tisane du soir", "Riz au lait"], fx:["thread","blossom"] },
 ];
 /* Photos d'ingrédients détourées : ajouter ici img/ing/<id>-1.webp, -2… dès qu'elles existent. */
 const INGREDIENT_IMAGES = {};

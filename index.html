@@ -15,18 +15,19 @@
 
 /* ---------- scène 3D : tous les pots vivent dans cette couche fixe ---------- */
 #stage{position:fixed;inset:0;z-index:2;pointer-events:none;perspective:1700px;overflow:hidden}
-.j3{position:absolute;left:-200px;top:-251px;width:400px;height:502px;transform-style:preserve-3d;will-change:transform;visibility:hidden}
+.j3{position:absolute;left:-200px;top:-260px;width:400px;height:520px;transform-style:preserve-3d;will-change:transform;visibility:hidden}
 .j3 .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .j3 .face img{width:100%;height:100%;object-fit:contain;display:block}
 .j3 .back{transform:rotateY(180deg)}
 .j3 .back img{transform:scaleX(-1);filter:saturate(.9)}
 .j3 .jsh{position:absolute;left:12%;right:12%;bottom:-3%;height:8%;border-radius:50%;background:radial-gradient(closest-side,rgba(40,15,0,.4),transparent);transform:translateZ(-30px);filter:blur(6px)}
-.blab{position:absolute;left:19%;right:19%;top:34%;bottom:9%;background:#FBF8F2;border-radius:7% / 5%;padding:7% 6% 5%;color:#2a1f18;font-family:var(--text);display:flex;flex-direction:column;gap:3.2%;text-align:center;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.05)}
+.blab{position:absolute;left:16%;right:16%;top:33%;bottom:10%;background:#FBF8F2;border-radius:7% / 5%;padding:7% 6% 5%;color:#2a1f18;font-family:var(--text);display:flex;flex-direction:column;gap:3.2%;text-align:center;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.05)}
 .blab .bt{font-family:var(--title);font-weight:700;font-size:20px;letter-spacing:.06em;color:var(--black)}
 .blab .bn{font-family:var(--title);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--bc)}
 .blab .bh{font-family:var(--title);font-weight:700;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;border-top:1px solid rgba(0,0,0,.15);padding-top:4%}
 .blab p{margin:0;font-size:10px;line-height:1.35}
 .blab .bar{margin:auto auto 0;width:62%;height:26px;background:repeating-linear-gradient(90deg,#222 0 2px,transparent 2px 3px,#222 3px 4px,transparent 4px 7px,#222 7px 8px,transparent 8px 9px)}
+.j3 .back .band{position:absolute;left:43.5%;width:13%;top:7%;height:27%;background:var(--bc);border-radius:2px;clip-path:polygon(0 0,100% 0,100% 88%,50% 100%,0 88%)}
 .blab .w{display:flex;justify-content:space-between;font-family:var(--title);font-weight:700;font-size:10px}
 
 /* ---------- 1. l'arc des miels ---------- */
@@ -58,7 +59,7 @@ body.dragging,body.dragging *{cursor:grabbing!important;user-select:none}
 .in-dark{position:absolute;inset:0;background:#160d08;opacity:0}
 .fr2{position:absolute;left:50%;top:50%;width:1440px;height:900px;transform:translate(-50%,-50%) scale(var(--k,1))}
 .in-num{position:absolute;left:463px;top:230px;width:640px;text-align:center;font-size:400px;color:transparent;-webkit-text-stroke:1.6px rgba(255,255,255,.9)}
-#inBar{position:absolute;left:560px;top:170px;width:446px;height:560px}
+#inBar{position:absolute;left:560px;top:160px;width:446px;height:580px}
 .in-head{position:absolute;left:40px;top:280px;font-size:68px;max-width:470px;color:#fff;margin:0}
 .in-head.small{font-size:52px}
 .in-icons{position:absolute;left:1292px;top:300px;display:grid;gap:6px}
@@ -85,7 +86,7 @@ body.dragging,body.dragging *{cursor:grabbing!important;user-select:none}
 .sc{position:relative;height:calc(390 * var(--w));border-radius:calc(22 * var(--w));background:var(--c);transform-style:preserve-3d;transition:transform .5s var(--ease),box-shadow .5s,opacity .8s,translate .8s;cursor:pointer;opacity:0;translate:0 30px}
 .sc.in{opacity:1;translate:0 0}
 .sc .nm{position:absolute;left:0;right:0;top:calc(24 * var(--w));text-align:center;font-size:calc(26 * var(--w));color:var(--fg);line-height:.95;padding:0 8px}
-.sc .pk{position:absolute;left:50%;top:calc(104 * var(--w));width:calc(190 * var(--w));aspect-ratio:400/502;transform:translateX(-50%) translateZ(30px);filter:drop-shadow(0 calc(12 * var(--w)) calc(12 * var(--w)) rgba(40,15,0,.3))}
+.sc .pk{position:absolute;left:50%;top:calc(104 * var(--w));width:calc(190 * var(--w));aspect-ratio:400/520;transform:translateX(-50%) translateZ(30px);filter:drop-shadow(0 calc(12 * var(--w)) calc(12 * var(--w)) rgba(40,15,0,.3))}
 .sc .pk img{width:100%;height:100%;object-fit:contain}
 .sc.live .pk{visibility:hidden}
 .sc .pr{position:absolute;left:calc(18 * var(--w));bottom:calc(20 * var(--w));font-family:var(--title);font-weight:600;font-size:max(12px,calc(14 * var(--w)));color:var(--fg);transform:translateZ(20px)}
@@ -149,7 +150,7 @@ body.dragging,body.dragging *{cursor:grabbing!important;user-select:none}
   .fr2{width:390px;height:780px}
   .in-head{left:16px;top:84px;font-size:40px}.in-head.small{font-size:32px}
   .in-num{left:0;width:390px;top:240px;font-size:210px}
-  #inBar{left:95px;top:230px;width:200px;height:251px}
+  #inBar{left:95px;top:226px;width:200px;height:260px}
   .in-icons{left:50%;top:auto;bottom:118px;transform:translateX(-50%);grid-auto-flow:column;gap:8px}
   .in-icons button{width:52px;height:52px}
   .in-cap{left:0;right:0;top:auto;bottom:62px;text-align:center;font-size:11.5px}
@@ -300,9 +301,9 @@ const ann = $("#announce"), hdr = $("#hdr");
 let vw = innerWidth, vh = innerHeight, phone = vw < 820;
 
 /* ======================== LES POTS 3D (CSS 3D, sans WebGL : se porte tel quel sur Shopify) ======================== */
-const stage = $("#stage"), BH = 502;
+const stage = $("#stage"), BH = 520;
 function backLabel(p){
-  return `<div class="blab" style="--bc:${p.color}"><div class="bt">KŌMI</div><div class="bn">${p.name}</div>
+  return `<div class="band" style="--bc:${p.color}"></div><div class="blab" style="--bc:${p.color}"><div class="bt">KŌMI</div><div class="bn">${p.name}</div>
     <div class="bh">Composition</div><p>${p.ing.replace(" · ", ". Origine : ")}.</p>
     <div class="bh">Dégustation</div><p>${p.tagline}. ${p.pairings.join(", ")}.</p>
     <div class="bh">Conservation</div><p>À l'abri de la lumière et de la chaleur. Déconseillé aux enfants de moins d'un an.</p>
@@ -316,7 +317,7 @@ function makeJar(){
 function setJar(el, p){
   if(el._id === p.id) return; el._id = p.id;
   const [f,b] = el.querySelectorAll("img"); f.src = jarSrc(p); b.src = jarSrc(p);
-  const old = el.querySelector(".blab"); if(old) old.remove();
+  el.querySelectorAll(".blab,.band").forEach(x=>x.remove());
   el.querySelector(".back").insertAdjacentHTML("beforeend", backLabel(p));
 }
 function place(el, s){
