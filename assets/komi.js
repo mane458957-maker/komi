@@ -51,6 +51,11 @@ const Cart = {
   set(id,q){ if(q<=0) this.items = this.items.filter(i=>i.id!==id); else this.items.find(i=>i.id===id).q = q; this.save(); renderCart(); },
 };
 
+function menuCat(title, badge, cls, ids, trio){
+  const minis = ids.map(id=>{ const p = byId(id); return `<a class="mini" href="produit.html?p=${p.id}" style="--c:${p.color}"><span class="sq"><img src="${jarSrc(p)}" alt="" loading="lazy"></span><small>${p.name.replace(/^Miel (d'|de )/,"")}</small></a>`; }).join("");
+  return `<details class="cat"><summary>${title}${badge?`<span class="b ${cls}">${badge}</span>`:""}<span class="pl"><svg viewBox="0 0 18 18"><path d="M9 3v12M3 9h12"/></svg></span></summary>
+    <div class="minis">${minis}</div>${trio?`<a class="all" href="produit.html?p=lavande">Composer un coffret trio</a>`:`<a class="all" href="index.html#boutique">Tout voir</a>`}</details>`;
+}
 function shellHTML(){
   return `
 <div class="scrim" id="scrim"></div>
@@ -63,10 +68,35 @@ function shellHTML(){
     <a class="btn dark block" href="paiement.html">Procéder au paiement</a>
   </div>
 </aside>
-<div class="menu" id="menu" aria-hidden="true">
-  <div class="top"><span class="logo" style="font-size:1.6rem">KŌMI</span><button class="icon" id="menuClose" aria-label="Fermer le menu"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-  <nav><a class="big" href="index.html#boutique">Boutique</a><a class="big" href="index.html#coffrets">Coffrets</a><a class="big" href="index.html#recettes">Recettes</a><a class="big" href="index.html#histoire">Notre histoire</a></nav>
-</div>`;
+<div class="menu-scrim" id="menuScrim"></div>
+<nav class="menu" id="menu" aria-hidden="true" aria-label="Menu">
+  <div class="top"><a class="logo" href="index.html">KŌMI</a><span class="r"><button class="mi" aria-label="Rechercher"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></button><button class="mi x" id="menuClose" aria-label="Fermer le menu"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></span></div>
+  <div class="loc"><span class="pill"><i class="fl"></i>France · EUR</span><span class="lg"><b>Français</b><span>English</span></span></div>
+  <a class="promo" href="produit.html?p=lavande"><span><b>Coffret trio −10 %</b><span>Composez votre trio parmi les 10 miels</span></span><i><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i></a>
+  <div class="cats">
+    ${menuCat("Meilleures ventes", "Top 4", "", ["oranger","thym","lavande","relaxation"])}
+    ${menuCat("Monofloraux", "", "", PRODUCTS.filter(p=>p.fam==="mono").map(p=>p.id))}
+    ${menuCat("Miels & plantes", "", "", PRODUCTS.filter(p=>p.fam==="infu").map(p=>p.id))}
+    ${menuCat("Coffrets", "Nouveau", "n", ["lavande","oranger","thym"], true)}
+    ${menuCat("Toute la collection", "", "", PRODUCTS.map(p=>p.id))}
+  </div>
+  <div class="more"><p class="lbl">Plus de KŌMI</p>
+    <div class="grid2">
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M12 3 4 7v10l8 4 8-4V7Z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg>Suivre ma commande</a>
+      <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/></svg>Aide &amp; FAQ</a>
+      <a href="#"><svg viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M12 9v11M4 13h16M12 9c-2-4-6-4-6-1s6 1 6 1Zm0 0c2-4 6-4 6-1s-6 1-6 1Z"/></svg>Cartes cadeaux</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/></svg>Avis clients</a>
+      <a href="index.html#recettes"><svg viewBox="0 0 24 24"><path d="M4 20 14 10M14 10l3-6 3 3-6 3Z"/><path d="M6 14l4 4"/></svg>Recettes</a>
+      <a href="index.html#histoire"><svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3Z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>Notre histoire</a>
+      <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.4-3.6 4.2-5.3 7.5-5.3s6.1 1.7 7.5 5.3"/></svg>Se connecter</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>Contact</a>
+    </div>
+    <div class="card"><b>Livraison en France</b><p>Paiement sécurisé, expédition soignée dans la boîte KŌMI. Une question ? Notre équipe vous répond par email.</p>
+      <span class="pay"><span>CB</span><span>Visa</span><span>Mastercard</span><span>Apple Pay</span><span>Google Pay</span><span>PayPal</span></span></div>
+    <div class="soc"><a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/></svg></a><a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.4 2.6 2.2 4.4 5 4.6"/></svg></a></div>
+    <p class="foot">© 2026 KŌMI · Le miel, en couleurs.</p>
+  </div>
+</nav>`;
 }
 function renderCart(){
   const n = Cart.count();
@@ -93,6 +123,8 @@ function renderCart(){
     </div>`; }).join("");
   $("#subtotal").textContent = euro(Cart.total());
 }
+function openMenu(){ $("#menu").classList.add("on"); $("#menu").setAttribute("aria-hidden","false"); $("#menuScrim").classList.add("on"); document.body.classList.add("lock"); }
+function closeMenu(){ const m = $("#menu"); if(!m || !m.classList.contains("on")) return; m.classList.remove("on"); m.setAttribute("aria-hidden","true"); $("#menuScrim").classList.remove("on"); document.body.classList.remove("lock"); }
 function openDrawer(){ $("#drawer").classList.add("on"); $("#drawer").setAttribute("aria-hidden","false"); $("#scrim").classList.add("on"); document.body.classList.add("lock"); }
 function closeDrawer(){ $("#drawer").classList.remove("on"); $("#drawer").setAttribute("aria-hidden","true"); $("#scrim").classList.remove("on"); document.body.classList.remove("lock"); }
 
@@ -113,8 +145,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
     if(t.closest("#drawerClose") || t.closest("#scrim") || t.closest("[data-close]")){ closeDrawer(); return; }
     const q = t.closest("[data-q]"); if(q){ const it = Cart.items.find(i=>i.id===q.dataset.q); Cart.set(q.dataset.q, it.q + +q.dataset.d); return; }
     const rm = t.closest("[data-rm]"); if(rm){ Cart.set(rm.dataset.rm, 0); return; }
-    if(t.closest(".burger")){ $("#menu").classList.add("on"); $("#menu").setAttribute("aria-hidden","false"); return; }
-    if(t.closest("#menuClose") || t.closest("#menu a")){ $("#menu").classList.remove("on"); $("#menu").setAttribute("aria-hidden","true"); }
+    if(t.closest(".burger")){ openMenu(); return; }
+    if(t.closest("#menuClose") || t.closest("#menuScrim") || t.closest("#menu a")){ closeMenu(); }
   });
-  document.addEventListener("keydown", e=>{ if(e.key==="Escape"){ closeDrawer(); $("#menu").classList.remove("on"); } });
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape"){ closeDrawer(); closeMenu(); } });
 });
